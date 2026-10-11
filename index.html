@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sledy Top-Up</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%20width%3D%2236%22%20height%3D%2236%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22lg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2300F0FF%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FF7A1A%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath%20d%3D%22M20%202%2036%2014%2020%2038%204%2014Z%22%20fill%3D%22%230D1117%22%20stroke%3D%22url%28%23lg%29%22%20stroke-width%3D%222.4%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M22.5%209%2013%2022h6.5L17.5%2031%2027%2018h-6.5Z%22%20fill%3D%22url%28%23lg%29%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D1117;--p:#141B26;--p2:#1B2433;--ln:#26324a;--tx:#E6EDF6;--mu:#8A98AE;--cy:#00F0FF;--or:#FF7A1A;--rd:#FF4D6A}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font:16px/1.5 'Outfit',system-ui,sans-serif}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:#0d1117ee;backdrop-filter:blur(8px);border-bottom:1px solid var(--ln)}
+.nav{max-width:1100px;margin:auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 18px}
+.logo{display:flex;align-items:center;gap:8px;font:800 19px 'Unbounded',sans-serif;margin-right:auto;color:var(--cy);text-shadow:0 0 18px #00f0ff66;cursor:pointer;background:none;border:0}
+select{background:var(--p);border:1px solid var(--ln);border-radius:8px;padding:8px 10px}
+.btn{background:var(--or);color:#1a0d00;border:0;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer}
+.btn.ghost{background:none;color:var(--tx);border:1px solid var(--ln)}
+.btn:hover{filter:brightness(1.1)}
+main{max-width:1100px;margin:auto;padding:0 18px}
+.hero{margin-top:20px;padding:60px 28px;border-radius:16px;background-color:var(--p);background-image:linear-gradient(90deg,#0D1117 35%,#0D111780),url(img/hero.jpg);background-size:cover;background-position:center}.hero>*{max-width:620px}
+.hero h1{font:800 clamp(28px,5vw,46px)/1.15 'Unbounded',sans-serif;text-shadow:0 0 40px #00f0ff40}
+.hero p{color:var(--mu);margin-top:16px;max-width:52ch}
+h2{font:700 22px 'Unbounded',sans-serif;margin:40px 0 4px}
+.sub{color:var(--mu);margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.card{background:var(--p);border:1px solid var(--ln);border-radius:14px;overflow:hidden;text-align:left;cursor:pointer;padding:0;transition:border-color .2s,box-shadow .2s}
+.card:hover{border-color:var(--cy);box-shadow:0 0 22px #00f0ff30}
+.tile{position:relative;overflow:hidden;height:130px;display:grid;place-items:center;font:800 24px 'Unbounded',sans-serif;text-align:center;padding:8px}
+.t1{background:linear-gradient(135deg,#ff7a1a,#ff2e63)}.t2{background:linear-gradient(135deg,#7b2ff7,#00f0ff)}
+.t3{background:linear-gradient(135deg,#0a7cff,#00f0ff)}.t4{background:linear-gradient(135deg,#00c853,#ffe600);color:#10200f}
+.t5{background:linear-gradient(135deg,#e50914,#5c0008)}.t6{background:linear-gradient(135deg,#00a8e1,#1a2a6c)}
+.cb{padding:14px 16px}.cb b{display:block;font-size:18px}.cb span{color:var(--mu);font-size:14px}
+.cb em{display:block;margin-top:10px;font-style:normal;color:var(--cy);font-weight:600}
+.dim{display:none!important}
+.ov{position:fixed;inset:0;background:#000b;display:none;place-items:center;z-index:50;padding:16px;overflow:auto}
+.ov.on{display:grid}
+.modal{background:var(--p);border:1px solid var(--ln);border-radius:16px;padding:22px;width:100%;max-width:420px}
+.modal h3{font:700 18px 'Unbounded',sans-serif;margin-bottom:14px}
+label{display:block;margin:12px 0 4px;color:var(--mu);font-size:14px}
+input,.modal select{width:100%;background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:10px}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay label{margin:0;display:flex;gap:8px;align-items:center;background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:10px;color:var(--tx);cursor:pointer}
+.pay input{width:auto}
+.pay label:has(input:checked){border-color:var(--cy)}
+.row{display:flex;gap:10px;margin-top:18px}.row .btn{flex:1}
+.tabs{display:flex;gap:8px;margin-bottom:6px}.tabs .btn{flex:1}
+.err{color:var(--rd);font-size:14px;min-height:20px;margin-top:10px}
+.note{color:var(--mu);font-size:13px;margin-top:6px}
+.tot{display:flex;justify-content:space-between;margin-top:16px;font-weight:600}
+.box{background:var(--p);border:1px solid var(--ln);border-radius:14px;padding:18px;margin-top:16px}
+.box p{margin:6px 0}
+.ord{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln);font-size:15px}
+.ord small{color:var(--mu);display:block}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--p2);border:1px solid var(--cy);padding:12px 18px;border-radius:10px;z-index:90;display:none;max-width:90vw}
+footer{border-top:1px solid var(--ln);margin-top:56px;padding:26px 18px;text-align:center;color:var(--mu);font-size:14px}
+footer b{color:var(--cy)}
+#dash{display:none}
+body.indash #dash{display:block}body.indash #home{display:none}
+.t7{background:linear-gradient(135deg,#00f0ff,#7b2ff7);color:#06121a}
+.fg{max-width:1100px;margin:0 auto 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;text-align:left}
+footer a{display:block;color:var(--mu);text-decoration:none;margin:4px 0}footer a:hover{color:var(--cy)}
+footer p{margin:6px 0}.fg b{color:var(--tx)}
+.rm{padding:2px 9px;margin-left:6px}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ban{border-radius:14px;padding:26px 22px;margin:44px 0 18px;background-color:var(--p);background-image:linear-gradient(90deg,#0D1117f2 40%,#0D111766),var(--img,none);background-size:cover;background-position:center}
+.ban h2{margin:0}.ban .sub{margin:4px 0 0}
+.b-ff{--img:url(img/sec-ff.jpg)}.b-st{--img:url(img/sec-st.jpg)}.b-rec{--img:url(img/sec-rec.jpg)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;list-style:none;padding:0;counter-reset:s}
+.steps li{background:var(--p);border:1px solid var(--ln);border-radius:12px;padding:14px 16px;counter-increment:s}
+.steps li::before{content:counter(s);display:block;font:800 22px 'Unbounded',sans-serif;color:var(--cy)}
+details{background:var(--p);border:1px solid var(--ln);border-radius:12px;padding:12px 16px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}details p{color:var(--mu);margin-top:8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
+.stat{background:var(--p);border:1px solid var(--ln);border-radius:12px;padding:14px}
+.stat b{display:block;font:700 20px 'Unbounded',sans-serif;color:var(--cy)}.stat span{color:var(--mu);font-size:14px}
+.oc{padding:14px 0;border-bottom:1px solid var(--ln)}.oc .h{display:flex;justify-content:space-between;gap:10px}
+.chip{font-size:12px;border-radius:99px;padding:2px 10px;border:1px solid var(--ln)}
+.chip.pend{color:var(--or);border-color:var(--or)}.chip.paid{color:var(--cy);border-color:var(--cy)}
+.chip.ok{color:#3ddc84;border-color:#3ddc84}.chip.cx{color:var(--mu)}
+.wait{background:var(--bg);border:1px dashed var(--or);border-radius:10px;padding:12px;margin-top:8px}
+.wait ol{margin:6px 0 10px 18px}.wait .row{flex-wrap:wrap;margin-top:8px}
+.wait input{flex:2 1 140px;width:auto}.wait .btn{flex:1 1 auto}
+a.btn{text-decoration:none;display:inline-block;text-align:center}
+#svc{margin-top:0}
+.srch{margin:22px 0 0}.srch input{padding:12px 16px;border-radius:12px;font-size:16px}
+.lock{background:var(--p);border:1px dashed var(--ln);border-radius:14px;padding:26px;text-align:center;margin-top:28px}
+.lock p{margin-bottom:12px;color:var(--mu)}
+body:not(.guest) #lock,body.guest #cartBtn{display:none}body.guest #svc{display:none}
+h4{margin:18px 0 4px;color:var(--mu);font-size:15px}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.tile svg{width:54px;height:54px}.tile span{font-size:14px}
+.pay .pt{position:relative;display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--bg);cursor:pointer}
+.pay .pt input{position:absolute;opacity:0;width:1px;height:1px}
+.pt i{font:800 18px 'Unbounded',sans-serif;font-style:normal;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:#fff}
+.pt.m i{background:linear-gradient(135deg,#e5383b,#ff7a1a)}.pt.n i{background:linear-gradient(135deg,#0a7cff,#00c853)}
+.pay .pt:has(input:checked){border-color:var(--cy);box-shadow:0 0 16px #00f0ff30}
+.pay .pt:has(input:focus-visible){outline:2px solid var(--cy)}
+.pk{display:grid;gap:6px;max-height:210px;overflow:auto}
+.pr{display:flex;align-items:center;gap:10px;margin:0;padding:8px 10px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--tx)}
+.pr span{flex:1}.pr b{color:var(--cy);font-weight:600}.pr input{width:64px;padding:6px}
+.vrow{margin-top:8px}#vOut{margin-left:8px}
+.rcb{white-space:pre-wrap;background:var(--bg);border:1px dashed var(--ln);border-radius:10px;padding:12px;font:13px/1.55 ui-monospace,Menlo,Consolas,monospace;max-height:260px;overflow:auto}
+body{padding-bottom:84px}
+.ann{background:linear-gradient(90deg,#ff7a1a,#ff2e63);color:#1a0d00;text-align:center;padding:8px 14px;font-weight:600}
+.lg{position:relative}.lg .btn{display:flex;align-items:center;gap:8px;padding:8px 10px}
+.lg svg{width:24px;height:16px;border-radius:3px;flex:none}
+.lgm{position:absolute;right:0;top:calc(100% + 6px);background:var(--p);border:1px solid var(--ln);border-radius:10px;padding:6px;min-width:160px;z-index:40}
+.lgm button{display:flex;align-items:center;gap:8px;width:100%;background:none;border:0;color:var(--tx);padding:8px;border-radius:8px;cursor:pointer}
+.lgm button:hover{background:var(--p2)}
+.hero{display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+.hero>.hl{flex:1 1 320px;max-width:560px}.top3{flex:0 1 290px;display:grid;gap:8px}
+.top3 small{color:var(--mu);letter-spacing:.04em}
+.tp{display:flex;align-items:center;gap:12px;background:#0d1117cc;border:1px solid var(--ln);border-radius:12px;padding:10px 14px;animation:slide .6s both,pulse 6s infinite;animation-delay:calc(var(--i)*.15s),calc(var(--i)*2s)}
+.tp i{font:800 16px 'Unbounded',sans-serif;color:var(--or);font-style:normal}
+@keyframes slide{from{opacity:0;transform:translateX(24px)}}
+@keyframes pulse{0%,30%{border-color:var(--cy);box-shadow:0 0 20px #00f0ff44;transform:scale(1.04)}40%,100%{border-color:var(--ln);box-shadow:none;transform:none}}
+.srch{position:relative}.mag{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--mu);pointer-events:none}
+.srch input{padding-left:44px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.chips .btn{padding:6px 12px}
+.wf{max-width:520px}.wf .btn#wGo{width:100%;margin-top:10px}
+#bnav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:2px;overflow-x:auto;background:#0d1117f2;backdrop-filter:blur(10px);border-top:1px solid var(--ln);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+#bnav button{flex:1 0 64px;background:none;border:0;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;padding:6px 4px;border-radius:10px;cursor:pointer}
+#bnav button b{font-size:20px;font-weight:400}#bnav button:hover{color:var(--cy);background:var(--p)}
+body.guest .nv-c{display:none}
+#toast{bottom:92px}
+.prof{display:flex;flex-wrap:wrap;align-items:center;gap:16px;background:linear-gradient(135deg,var(--p),var(--p2));border:1px solid var(--ln);border-radius:16px;padding:20px;margin-top:16px}
+.avbig{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font:800 28px 'Unbounded',sans-serif;background:linear-gradient(135deg,var(--cy),var(--or));color:#06121a}
+.pi{flex:1 1 180px}.pi h2{margin:0}
+.pb{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.pb b{font:800 24px 'Unbounded',sans-serif;color:var(--cy)}
+.tabs2{display:flex;gap:6px;overflow-x:auto;margin:18px 0 6px;border-bottom:1px solid var(--ln)}
+.tabs2 button{background:none;border:0;color:var(--mu);padding:10px 14px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs2 button.on{color:var(--cy);border-color:var(--cy)}
+.pane{display:none}.pane.on{display:block}
+.meter{height:6px;background:var(--ln);border-radius:9px;margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--rd);transition:width .2s,background .2s}
+.rcc{background:#fff;color:#0D1117;border-radius:14px;padding:18px;margin-bottom:12px}
+.rcc .note{color:#556070}.rch{display:flex;justify-content:space-between;align-items:center}
+.rcl{display:flex;align-items:center;gap:8px;font:800 15px 'Unbounded',sans-serif}.rcl svg{width:28px;height:28px}
+.rct{margin:14px 0 6px;font-weight:600;color:#556070}
+.rcr div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #cbd5e1;font-size:14px}
+.rcr span{color:#667085}.rcr b{text-align:right;word-break:break-word}
+.rcr div:last-child{font-size:18px;border-bottom:0}
+.rcm{max-width:460px}
+#prod{display:none}body.inprod #prod{display:block}body.inprod #home{display:none}
+.phero{display:flex;flex-wrap:wrap;gap:20px;margin-top:16px;background:linear-gradient(135deg,var(--p),var(--p2));border:1px solid var(--ln);border-radius:18px;padding:18px}
+.ptile{flex:0 0 190px;height:150px;border-radius:14px;overflow:hidden}.ptile .tile{height:100%}
+.pinfo{flex:1 1 260px}.pinfo h1{font:800 clamp(22px,4vw,32px)/1.15 'Unbounded',sans-serif;margin:8px 0}
+.pdesc{color:var(--mu)}.pprice{margin-top:12px;font:700 20px 'Unbounded',sans-serif;color:var(--cy)}
+.pbadges{display:flex;gap:8px;flex-wrap:wrap}.pbadges span{font-size:12px;border:1px solid var(--ln);border-radius:99px;padding:3px 10px;color:var(--mu)}
+.pst{display:flex;align-items:center;gap:10px;font:700 17px 'Outfit',sans-serif;margin:26px 0 12px}
+.pst i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--cy);color:#06121a;font:800 13px 'Unbounded',sans-serif;font-style:normal}
+.req{font-style:normal;font-size:12px;color:var(--rd);border:1px solid var(--rd);border-radius:99px;padding:1px 10px}
+.ptiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.pt2{position:relative;background:var(--p);border:1px solid var(--ln);border-radius:14px;padding:16px 14px;text-align:center;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.pt2:hover{border-color:#3a5078}.pt2 b{display:block;font-size:17px}
+.pt2 em{display:block;margin-top:4px;color:var(--cy);font-style:normal;font-weight:600}
+.pt2 .ck{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--cy);color:#06121a;display:none;place-items:center;font-size:13px;font-weight:800}
+.pt2.on{border-color:var(--cy);box-shadow:0 0 0 1px var(--cy) inset,0 0 22px #00f0ff30;background:#102030}.pt2.on .ck{display:grid}
+.stp{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:10px}
+.stp button{width:30px;height:30px;border-radius:8px;border:1px solid var(--ln);background:var(--bg);cursor:pointer;font-size:18px;line-height:1}
+.pacc{background:var(--p);border:1px solid #3a3f78;border-radius:16px;padding:6px 18px 18px;margin-top:10px}
+.pinp{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--ln);border-radius:12px;padding:6px 6px 6px 12px}
+.pinp:focus-within{border-color:var(--cy)}.pf{font:800 13px 'Unbounded',sans-serif;color:var(--or)}
+.pinp input{border:0;background:none;padding:8px 4px;flex:1;width:auto;min-width:0}.pinp input:focus-visible{outline:none}
+.pbar{position:sticky;bottom:74px;z-index:25;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:22px;background:#0d1117f2;backdrop-filter:blur(10px);border:1px solid var(--ln);border-radius:14px;padding:12px 14px}
+.ptot{flex:1 1 140px;display:flex;flex-direction:column}.ptot span{color:var(--mu);font-size:13px}.ptot b{font:800 20px 'Unbounded',sans-serif;color:var(--cy)}
+.pbar .btn{flex:1 1 140px;padding:12px 16px}
+#vOut{margin:8px 0 0}
+#co{display:none}body.inco #co{display:block}body.inco #home{display:none}
+.cuser{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--ln);margin-top:10px}
+.cuser b{display:block}.av2{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#ff7a1a22;color:var(--or);font-weight:700}
+.cogrid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:6px}
+@media (max-width:820px){.cogrid{grid-template-columns:1fr;gap:6px}}
+.cap{margin-top:26px;font-size:12px;letter-spacing:.08em;color:var(--mu);text-transform:uppercase}
+.coi{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--ln)}
+.coi small{display:block;color:var(--mu)}.coa{display:flex;align-items:flex-start;gap:10px;white-space:nowrap;font-weight:600}
+.coa .x{background:none;border:0;cursor:pointer;opacity:.6;font-size:15px;color:var(--tx)}.coa .x:hover{opacity:1}
+.rw{display:flex;justify-content:space-between;align-items:center;padding:12px 0;color:var(--mu);border-bottom:1px solid var(--ln)}
+.rw.big{border:0;color:var(--tx)}.rw.big b{font:800 24px 'Unbounded',sans-serif;color:var(--cy)}
+.pm2{display:block;position:relative;margin:0 0 10px;padding:16px 16px 16px 50px;border:1px solid var(--ln);border-radius:14px;background:var(--p);cursor:pointer;color:var(--tx)}
+.pm2 input{position:absolute;opacity:0;width:1px;height:1px}
+.pm2 .rd{position:absolute;left:16px;top:18px;width:20px;height:20px;border-radius:50%;border:2px solid #3a4560}
+.pm2 b{font-weight:600}.pm2 em{font-style:normal;color:var(--cy)}
+.pm2.on{background:#10202e;border-color:var(--cy)}.pm2.on .rd{border-color:var(--cy);background:radial-gradient(circle,var(--cy) 0 38%,transparent 42%)}
+.pm2.m.on{border-color:var(--rd)}.pm2.m.on .rd{border-color:var(--rd);background:radial-gradient(circle,var(--rd) 0 38%,transparent 42%)}
+.pm2.n.on{border-color:#3d8bff}.pm2.n.on .rd{border-color:#3d8bff;background:radial-gradient(circle,#3d8bff 0 38%,transparent 42%)}
+.pm2.off{opacity:.55;cursor:not-allowed}.pm2:has(input:focus-visible){outline:2px solid var(--cy)}
+.pmd{margin-top:10px;background:#0d1117;border-radius:10px;padding:10px 12px;color:var(--mu);font-size:14px}
+.warn2{background:#2a1d0c;border-left:4px solid var(--or);color:#ffd9b3;border-radius:10px;padding:12px 14px;margin:14px 0}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:16px 0 0;color:var(--tx)}.chk input{width:auto;margin-top:4px}.chk a{color:var(--rd)}
+.pay2{width:100%;padding:15px;font-size:17px;margin-top:14px;background:linear-gradient(90deg,var(--or),#ff2e63);color:#fff}
+.pay2:disabled{opacity:.5;cursor:not-allowed}
+#tBody p{margin:8px 0}
+a.wafab{position:fixed;right:14px;bottom:86px;z-index:28;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#25D366;color:#fff;font-size:22px;text-decoration:none;box-shadow:0 6px 18px #0008}
+.btn.sm{padding:5px 10px;font-size:13px}
+.nfw{position:relative}.nfc{position:absolute;top:-7px;right:-7px;background:var(--rd);color:#fff;border-radius:99px;font-size:11px;padding:1px 6px;font-weight:700}
+.nfm{position:absolute;right:0;top:calc(100% + 6px);width:min(340px,92vw);max-height:70vh;overflow:auto;background:var(--p);border:1px solid var(--ln);border-radius:12px;z-index:45;padding:6px}
+.nfh{display:flex;justify-content:space-between;align-items:center;padding:6px 8px}
+.nfi{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--ln);color:var(--tx);padding:10px 8px;cursor:pointer;border-radius:8px}
+.nfi:hover{background:var(--p2)}.nfi span{display:block;color:var(--mu);font-size:14px}.nfi small{color:var(--mu);font-size:12px}
+.nfi.u{border-left:3px solid var(--cy);padding-left:10px}.nfi.u b::after{content:' •';color:var(--cy)}
+.rct.okc{color:#15803d}
+.stp4{display:flex;list-style:none;padding:0;margin:14px 0 6px}
+.stp4 li{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;font-size:12px;color:var(--mu);text-align:center}
+.stp4 li::before{content:'';position:absolute;top:14px;left:-50%;width:100%;height:2px;background:var(--ln);z-index:0}
+.stp4 li:first-child::before{display:none}
+.stp4 li i{position:relative;z-index:1;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:2px solid var(--ln);font-style:normal;font-weight:700;font-size:13px}
+.stp4 li.done{color:var(--tx)}.stp4 li.done i{background:var(--cy);border-color:var(--cy);color:#06121a}.stp4 li.done::before{background:var(--cy)}
+.stp4 li.now{color:var(--or)}.stp4 li.now i{border-color:var(--or);color:var(--or);box-shadow:0 0 0 4px #ff7a1a22}.stp4 li.now::before{background:linear-gradient(90deg,var(--cy),var(--or))}
+.wait2{background:var(--bg);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-top:10px}
+.wtop{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.wamt{display:block;font:800 24px 'Unbounded',sans-serif;color:var(--cy)}
+.wmeth{display:flex;align-items:center;gap:10px}.wmeth small{display:block;color:var(--mu)}
+.mk{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:#fff;font:800 16px 'Unbounded',sans-serif;font-style:normal}
+.mk.m{background:linear-gradient(135deg,#e5383b,#ff7a1a)}.mk.n{background:linear-gradient(135deg,#0a7cff,#00c853)}
+.payb{width:100%;margin-top:14px;padding:14px;font-size:16px;background:linear-gradient(90deg,var(--or),#ff2e63);color:#fff}
+.man{margin-top:14px;border-top:1px solid var(--ln);padding-top:10px}.man summary{cursor:pointer;color:var(--mu)}
+.man ol{margin:8px 0 8px 18px}.man .row{flex-wrap:wrap;margin-top:8px}.man input{flex:2 1 140px;width:auto}.man .btn{flex:1 1 auto}
+.vh{display:flex;align-items:center;gap:10px}
+.spin{width:18px;height:18px;border-radius:50%;border:3px solid var(--ln);border-top-color:var(--cy);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+@media (prefers-reduced-motion:no-preference){.hero h1{animation:g 1.2s ease-out both}@keyframes g{from{opacity:0;transform:translateY(10px)}}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+  <button class="logo" id="logo" aria-label="Sledy Top-Up"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00F0FF"/><stop offset="1" stop-color="#FF7A1A"/></linearGradient></defs><path d="M20 2 36 14 20 38 4 14Z" fill="#0D1117" stroke="url(#lg)" stroke-width="2.4" stroke-linejoin="round"/><path d="M22.5 9 13 22h6.5L17.5 31 27 18h-6.5Z" fill="url(#lg)"/></svg><span>Sledy Top-Up</span></button>
+  <div class="lg" id="lg"><button class="btn ghost" id="lgBtn" aria-haspopup="listbox" aria-label="Language"></button><div class="lgm dim" id="lgMenu" role="listbox"></div></div>
+  <button class="btn ghost dim" id="balBtn" aria-label="Balance"><span id="balN">0</span> HTG</button>
+  <div class="nfw dim" id="nfw"><button class="btn ghost" id="nfBtn" aria-label="Notifications">🔔<span class="nfc dim" id="nfN">0</span></button><div class="nfm dim" id="nfMenu"></div></div>
+  <button class="btn ghost" id="cartBtn" aria-label="Cart">🛒 <span id="cartN">0</span></button>
+  <button class="btn ghost dim" id="dashBtn" aria-label="Account">👤 <span data-i="dash"></span></button>
+  <button class="btn" id="authBtn" data-i="reg"></button>
+</div></header>
+<div id="ann" class="ann dim"></div>
+
+<main id="home">
+  <section class="hero"><div class="hl"><h1 data-i="h1"></h1><p data-i="h2"></p></div><div class="top3" id="top3"></div></section>
+  <div id="svc">
+  <div class="srch"><svg class="mag" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input id="q" type="search" data-ph="srch" autocomplete="off"></div>
+  <div id="sections"></div>
+  <p class="note dim" id="noRes" data-i="noRes"></p>
+  <div class="ban" id="rec" style="--img:url(img/sec-rec.jpg)"><h2 data-i="recT"></h2><p class="sub" data-i="recS"></p></div>
+  <div class="box wf">
+    <label data-i="amt"></label><input id="wAmt" type="number" min="150" step="50" value="150">
+    <div class="chips" id="wQ"><button type="button" class="btn ghost" data-a="150">150</button><button type="button" class="btn ghost" data-a="300">300</button><button type="button" class="btn ghost" data-a="500">500</button><button type="button" class="btn ghost" data-a="1000">1000</button><button type="button" class="btn ghost" data-a="2500">2500</button></div>
+    <p class="err" id="wErr"></p>
+    <button class="btn" id="wGo" data-i="goCo"></button>
+  </div></div>
+  <div class="lock" id="lock"><p data-i="lockT"></p><button class="btn" id="lockBtn" data-i="reg"></button></div>
+  <h2 data-i="gdT" style="margin-top:48px"></h2><div id="guide"></div>
+  <h2 data-i="hwT" style="margin-top:48px"></h2>
+  <ol class="steps"><li data-i="hw1"></li><li data-i="hw2"></li><li data-i="hw3"></li><li data-i="hw4"></li></ol>
+  <h2 data-i="faqT"></h2>
+  <div id="faq"></div>
+</main>
+
+<main id="dash">
+  <button class="btn ghost" id="back" data-i="back" style="margin-top:18px"></button>
+  <div class="prof">
+    <div class="avbig" id="av">S</div>
+    <div class="pi"><h2 id="hello"></h2><p id="dMail" class="note"></p></div>
+    <div class="pb"><span class="note" data-i="bal"></span><b id="dBal"></b><button class="btn" id="recBtn" data-i="rech"></button></div>
+  </div>
+  <div class="tabs2" role="tablist"><button data-tab="sum" class="on" data-i="acct"></button><button data-tab="ord" data-i="ord"></button><button data-tab="wal" data-i="bal"></button><button data-tab="nf" data-i="nfT"></button><button data-tab="sec" data-i="secT"></button></div>
+  <section class="pane on" id="tab-sum"><div class="stats" id="stats"></div><h4 data-i="ordP"></h4><div id="sumOrders"></div></section>
+  <section class="pane" id="tab-ord"><div id="orders"></div></section>
+  <section class="pane" id="tab-wal"><div class="box"><p><span data-i="bal"></span>: <b id="dBal2"></b></p><p class="note" data-i="recS"></p><button class="btn" id="recBtn2" data-i="rech"></button></div><div id="walHist"></div></section>
+  <section class="pane" id="tab-nf"><div id="nfTab"></div></section>
+  <section class="pane" id="tab-sec">
+    <div class="box"><b data-i="secT"></b>
+      <label data-i="curP"></label><input id="curPw" type="password" autocomplete="current-password">
+      <label data-i="newPw"></label><input id="newPw" type="password" autocomplete="new-password">
+      <div class="meter"><i id="pwBar2"></i></div><p class="note" id="pwHint2"></p>
+      <div class="row"><button class="btn" id="pwGo" data-i="chPw"></button></div></div>
+    <div class="box"><p><span data-i="code"></span>: <b>••••</b> <button class="btn ghost" id="pinChg" data-i="chg"></button></p>
+      <div id="pinBox" class="dim"><label data-i="newP"></label><input id="newPin" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row"><button class="btn" id="pinSave" data-i="save"></button></div></div></div>
+    <div class="box"><button class="btn ghost" id="delBtn" data-i="delAcc" style="color:var(--rd)"></button></div>
+  </section>
+  <div class="row" style="max-width:420px;margin-top:16px"><a class="btn wa" target="_blank" rel="noopener" data-i="sup"></a><button class="btn ghost" id="out" data-i="logout"></button></div>
+</main>
+
+<main id="prod">
+  <button class="btn ghost" id="pBack" data-i="back" style="margin-top:18px"></button>
+  <section class="phero">
+    <div class="ptile" id="pTile"></div>
+    <div class="pinfo">
+      <div class="pbadges"><span data-i="pBd1"></span><span data-i="pBd2"></span></div>
+      <h1 id="bTitle"></h1><p class="pdesc" id="pDesc"></p>
+      <div class="pprice" id="pRange"></div>
+      <button class="btn ghost sm" id="pShare" type="button" style="margin-top:12px">🔗 <span data-i="share"></span></button>
+    </div>
+  </section>
+  <h3 class="pst"><i>1</i><span data-i="stepPk"></span></h3>
+  <div id="bPk" class="ptiles"></div>
+  <div class="pacc" id="pAcc">
+    <h3 class="pst"><i>2</i><span data-i="acct"></span><em class="req" data-i="reqd"></em></h3>
+    <p class="note" id="pAccH"></p>
+    <label id="bIdL"></label>
+    <div class="pinp"><span class="pf" id="pIcon">ID</span><input id="bId" autocomplete="off"><button class="btn ghost" id="vBtn" type="button" data-i="vBtn"></button></div>
+    <p class="note" id="vOut"></p>
+    <div class="warn2 dim" id="waNote"></div>
+  </div>
+  <p class="err" id="bErr"></p>
+  <div class="pbar"><div class="ptot"><span data-i="total"></span><b id="bTot">0 HTG</b></div><button class="btn ghost" id="bCart" data-i="addC"></button><button class="btn" id="bBuy" data-i="buyNow"></button></div>
+</main>
+
+<div class="ov" id="authOv"><div class="modal" role="dialog" aria-modal="true">
+  <div class="tabs"><button class="btn" id="tLogin" data-i="login"></button><button class="btn ghost" id="tSign" data-i="signup"></button></div>
+  <div id="fName" class="dim"><label data-i="name"></label><input id="aName" autocomplete="name"></div>
+  <label data-i="email"></label><input id="aMail" type="email" autocomplete="email">
+  <label data-i="pass"></label><input id="aPass" type="password" autocomplete="current-password">
+  <div id="fMeter" class="dim"><div class="meter"><i id="pwBar"></i></div><p class="note" id="pwHint"></p></div>
+  <div id="fPin" class="dim"><label data-i="pin"></label><input id="aPin" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><p class="note" data-i="pinH"></p></div>
+  <p class="err" id="aErr"></p>
+  <div class="row"><button class="btn ghost" data-close data-i="close"></button><button class="btn" id="aGo"></button></div>
+</div></div>
+
+<main id="co">
+  <button class="btn ghost" id="coBack" data-i="back" style="margin-top:18px"></button>
+  <div class="cuser"><div class="av2" id="coAv"></div><div><b id="coName"></b><span class="note" id="coMail"></span></div></div>
+  <div class="cogrid">
+    <section>
+      <h3 class="pst"><i>1</i><span data-i="payM"></span></h3>
+      <div id="pmList"></div>
+      <div id="pmInfo"><p class="note" id="pmHow"></p><label data-i="phone"></label><input id="coPhone" type="tel" inputmode="tel" placeholder="+509 3XXX XXXX" autocomplete="tel"></div>
+      <p class="warn2 dim" id="feeN"></p>
+    </section>
+    <aside>
+      <div class="cap" data-i="yourOrder"></div>
+      <div id="coList"></div>
+      <div class="rw"><span data-i="subT"></span><b id="coSub"></b></div>
+      <div class="rw big"><span data-i="total"></span><b id="coTot"></b></div>
+      <label data-i="pinC"></label><input id="coPin" type="password" inputmode="numeric" maxlength="6" autocomplete="off">
+      <label class="chk"><input type="checkbox" id="coTerms"><span><span data-i="tAcc"></span> <a href="#" id="termsLnk" data-i="tLnk"></a> *</span></label>
+      <p class="err" id="coErr"></p>
+      <button class="btn pay2" id="coPay"></button>
+    </aside>
+  </div>
+</main>
+
+<div class="ov" id="tOv"><div class="modal" role="dialog" aria-modal="true"><h3 data-i="tT"></h3><div id="tBody" class="note"></div><div class="row"><button class="btn" data-close data-i="close"></button></div></div></div>
+
+<div class="ov" id="cartOv"><div class="modal" role="dialog" aria-modal="true">
+  <h3 data-i="cart"></h3><div id="cList"></div>
+  <div class="tot"><span data-i="total"></span><span id="cTot"></span></div>
+  <p class="err" id="cErr"></p>
+  <div class="row"><button class="btn ghost" data-close data-i="close"></button><button class="btn" id="cGo" data-i="goCo"></button></div>
+</div></div>
+
+<div class="ov" id="rcOv"><div class="modal rcm" role="dialog" aria-modal="true">
+  <div id="rcCard" class="rcc"></div>
+  <div class="row"><button class="btn" id="rcPdf" data-i="rcPdf"></button><button class="btn ghost" id="rcWaB" data-i="rcWaB"></button></div>
+  <div class="row" style="margin-top:10px"><button class="btn ghost" data-close data-i="close"></button></div>
+</div></div>
+
+<div id="toast" role="status"></div>
+<a class="wafab wa" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+<nav id="bnav" aria-label="Menu"></nav>
+<footer>
+  <div class="fg">
+    <div><b>Sledy Top-Up</b><p data-i="fAbout"></p></div>
+    <div><b data-i="fServ"></b><a href="#ff">Free Fire</a><a href="#st">Netflix, Prime Video</a><a href="#rec" data-i="recT"></a></div>
+    <div><b data-i="fPay"></b><p>MonCash</p><p>Natcash</p><a class="wa" target="_blank" rel="noopener" data-i="sup"></a></div>
+  </div>
+  <b>Sledy Top-Up</b> &copy; <span id="yr"></span>. <span data-i="rights"></span>
+</footer>
+
+<script>
+/* shared.js - default catalog used by index.html and admin.html. Keep this file next to them. */
+(function(){
+var D=[['110+10 💎',165],['341+30 💎',510],['572+50 💎',860],['1166+100 💎',1750],['2398+200 💎',3600]];
+var S=[['@mo1',500],['@mo3',1450],['@mo6',2800],['@mo12',5400]];
+window.SLEDY_DEF={
+ cats:[
+  {id:'dia',e:'💎',tk:'ffT',sk:'ffS',nk:'catDia'},
+  {id:'str',e:'🎬',tk:'stT',sk:'stS',nk:'catStr'}],
+ items:[
+  {k:'ffna',n:'Free Fire (N/A)',m:'FF',c:'t1',cat:'dia',d:'d_ffna',id:'pid',hot:1,on:1,o:D},
+  {k:'lvl',n:'Level Up Pass',m:'LVL',c:'t2',cat:'dia',d:'d_lvl',id:'pid',on:1,fix:1,o:[['Level Up Pass',250]]},
+  {k:'eu',n:'Free Fire Europe',m:'FF EU',c:'t3',cat:'dia',d:'d_eu',id:'pid',on:1,o:D},
+  {k:'latam',n:'Free Fire LATAM',m:'FF LATAM',c:'t4',cat:'dia',d:'d_latam',id:'pid',hot:1,on:1,o:D},
+  {k:'nf',n:'Netflix',m:'NETFLIX',c:'t5',cat:'str',d:'d_nf',id:'wa',hot:1,on:1,o:S},
+  {k:'pv',n:'Prime Video',m:'PRIME',c:'t6',cat:'str',d:'d_pv',id:'wa',on:1,o:S}]
+};
+})();
+
+</script>
+<script>
+const T={
+ht:{login:'Konekte',signup:'Enskri',reg:'Konekte / Enskri',logout:'Dekonekte',dash:'Kont mwen',
+h1:'Rechaje Free Fire ak abònman ou nan kèk minit',h2:'Peye ak MonCash oswa Natcash. Antre ID ou, chwazi pake a, epi konfime ak Kòd Aksè ou.',
+ffT:'Sèvis Free Fire',ffS:'Chwazi sèvè kont ou an',stT:'Abònman streaming',stS:'Netflix ak Prime Video',from:'Apati de',
+d_ffna:'Dyaman pou kont ki nan sèvè N/A',d_lvl:'Pas level up Free Fire',d_eu:'Pou kont ki nan sèvè Ewòp',d_latam:'Pou kont ki nan sèvè Amerik Latin',d_nf:'Abònman Netflix',d_pv:'Abònman Prime Video',
+name:'Non',email:'Imèl',pass:'Modpas',pin:'Kòd Aksè (4 a 6 chif)',pinH:'Kòd sa a pwoteje kont ou ak tranzaksyon ou yo.',mk:'Kreye kont',ent:'Antre',
+pid:'Player ID',pkg:'Pake',payM:'Metòd peman',total:'Total',conf:'Konfime achte a',pinC:'Kòd Aksè pou konfime',
+errF:'Ranpli tout chan yo.',errP:'Kòd Aksè a dwe gen 4 a 6 chif.',errL:'Imèl oswa modpas pa kòrèk.',errEx:'Imèl sa a gen yon kont deja.',errPin:'Kòd Aksè a pa kòrèk.',
+need:'Konekte anvan ou achte.',okOrd:'Kòmand anrejistre. Voye peman an sou',hello:'Bonjou',acct:'Enfòmasyon kont',code:'Kòd Aksè',chg:'Chanje',newP:'Nouvo Kòd Aksè',save:'Sove',
+ord:'Kòmand mwen yo',none:'Pa gen kòmand ankò.',pend:'Annatant',close:'Fèmen',rights:'Tout dwa rezève.',pinOk:'Kòd Aksè chanje.',mo1:'1 mwa',mo3:'3 mwa',cart:'Panye',addC:'Ajoute nan panye',added:'Ajoute nan panye.',emptyC:'Panye a vid.',phone:'Nimewo ou ap peye a (MonCash/Natcash)',errPh:'Antre yon nimewo Ayiti ki valid (8 chif).',recT:'Rechaje kont Sledy Top-Up ou',recS:'Mete lajan sou kont ou pou ou toujou pare. Ou ka mete l nan panye tou.',d_wal:'Rechaj kont Sledy Top-Up ou (minimòm 150 HTG)',bal:'Balans',rech:'Rechaje kont',ok:'Konfime',fAbout:'Rechaj Free Fire ak abònman streaming ann Ayiti.',fServ:'Sèvis',fPay:'Peman aksepte',sOrd:'Kòmand',sPend:'An kous',sSpent:'Depans konfime',paid:'N ap verifye',cx:'Anile',wT:'Kisa ou dwe fè kounye a',w1:'Voye %a HTG sou %m bay %n.',w2:'Antre non ak nimewo ou itilize sou MonCash oswa Natcash anba a, epi klike "Mwen fin peye".',w3:'Tann konfimasyon an. Sa pran jeneralman kèk minit.',paidB:'Mwen fin peye',txid:'ID tranzaksyon',cancel:'Anile',copy:'Kopye nimewo',copied:'Nimewo kopye.',ref:'Ref',sup:'Èd sou WhatsApp',hwT:'Kijan li mache',hw1:'Kreye kont ou epi mete Kòd Aksè ou.',hw2:'Chwazi sèvis la epi mete l nan panye.',hw3:'Peye ak MonCash oswa Natcash.',hw4:'Resevwa livrezon an apre konfimasyon.',faqT:'Kesyon souvan',q1:'Konbyen tan livrezon an pran?',a1:'Livrezon an fèt anjeneral nan 5 a 30 minit apre n konfime peman an.',q2:'Kisa pou m fè si m fè yon erè nan ID a?',a2:'Si kòmand lan toujou "An kous", anile l epi refè l ak bon ID a. Si li deja livre, ekri nou sou WhatsApp.',w4:'Nou verifye peman an otomatikman. Nou livre kòmand lan sèlman si lajan an rive.',pName:'Non ou sou MonCash/Natcash',pNum:'Nimewo MonCash/Natcash',opt:'opsyonèl',back:'Retounen',amt:'Montan (minimòm 150 HTG)',errMin:'Rechaj minimòm lan se 150 HTG.',mo6:'6 mwa',mo12:'12 mwa',vSkip:'Verifikasyon non kont lan pa disponib. Asire ID a kòrèk.',noPay:'Peman otomatik poko disponib pou kounye a.',noApi:'Peman otomatik la poko aktive. Kontakte nou.',coHow:'Ou pral fini peman an apre ou konfime kòmand lan.',payLineApi:'Pou fini peman an, ale nan Kont mwen > Kòmand epi peze "Peye ak MonCash/NatCash".',stp1:'Kòmand',stp2:'Peman',stp3:'Verifikasyon',stp4:'Livrezon',payTot:'Total pou peye',payNowB:'Peye ak %m',apiHint:'Ou pral sou paj sekirize a. Peman an verifye otomatikman, ou pa bezwen antre anyen.',manT:'Peye manyèlman',verT:'N ap verifye peman an...',verD:'Sa pran jeneralman kèk minit. Paj la mete ajou otomatikman.',chkB:'Verifye kounye a',chkNo:'Peman an poko rive.',payErr:'Pa t kapab kòmanse peman an. Eseye ankò.',payFail:'Peman an pa pase. Eseye ankò.',grpN:'%n atik nan menm peman an',slipT:'Fich annatant',okT:'Komand reyisi',slipN:'Ou pral jwenn fich resi a apre ou resevwa kòmand lan.',nfT:'Notifikasyon',nfAll:'Make tout li',nfNone:'Pa gen notifikasyon.',nPend:'Fich annatant ou pare. Voye peman an pou n kontinye.',nPaid:'N ap verifye peman ou an.',nOk:'Komand ou an reyisi! Fich resi a disponib.',nCx:'Kòmand lan anile.',nOkT:'Komand reyisi: %p',waN:'Nimewo WhatsApp',accHW:'Antre nimewo WhatsApp ou (ak kòd peyi). Se la w ap resevwa kont lan.',gW:'Antre nimewo WhatsApp ou, chwazi plan an epi peye.',waMsg:'Ou ap resevwa kont ou sou WhatsApp ant 6 a 12 èdtan. Si tan sa depase, kontakte nou.',ctc:'Kontakte nou',errWa:'Antre yon nimewo WhatsApp valid (ak kòd peyi).',share:'Pataje',linkCp:'Lyen kopye.',yourOrder:'Kòmand ou',subT:'Sou-total',pmMon:'Peye ak kont MonCash ou an tout sekirite.',pmNat:'Peye ak kont NatCash ou an tout sekirite.',pmBal:'Balans',pmBalD:'Peye dirèkteman ak balans kont Sledy Top-Up ou.',errBal:'Balans ou pa ase.',feeN:'Yon frè %p% ap ajoute pou peman %m.',feeL:'Frè',tAcc:'Mwen li epi mwen aksepte',tLnk:'kondisyon jeneral yo',errTerms:'Ou dwe aksepte kondisyon yo.',payB:'Peye %a HTG',goCo:'Kontinye ak peman',tT:'Kondisyon jeneral',tB:'Livrezon an fèt apre n konfime peman an.|Ou responsab ID oswa imèl ou antre a. Verifye l anvan ou peye.|Yon ID tranzaksyon ka sèvi yon sèl fwa. Eseye reitilize l ka bloke kont ou.|Si kòmand lan pa livre epi ou te peye, n ap refè l oswa n ap ranbouse w.',stepPk:'Chwazi pake a',reqd:'Obligatwa',buyNow:'Achte kounye a',accHP:'Antre Player ID ou pou kontinye achte a.',accHE:'Antre imèl kont lan pou kontinye.',pBd1:'Livrezon rapid',pBd2:'MonCash ak Natcash',coT:'Konfime peman an',catDia:'Dyaman',catStr:'Streaming',navHome:'Akèy',navRec:'Rechaj',pwW:'Fèb',pwM:'Mwayen',pwS:'Fò',errWeak:'Modpas la dwe gen 8 karaktè ak omwen yon majiskil, yon minis ak yon chif.',errPinW:'Kòd Aksè a twò senp. Pa itilize 0000 oswa 1234.',errBan:'Kont sa a bloke. Kontakte sipò sou WhatsApp.',warnDup:'Avètisman: %n/5 tantativ ak menm ID tranzaksyon. Nan 5, kont ou ap bloke.',rcPdf:'Telechaje PDF',rcWaB:'Voye sou WhatsApp',re:'Rekòmande',topT:'Pi popilè sou sit la',lockT:'Konekte pou wè sèvis yo ak pri yo.',srch:'Chèche yon sèvis...',noRes:'Pa gen rezilta.',vBtn:'Verifye ID',vAcc:'Non kont lan',vNo:'Nou pa jwenn ID sa a.',vDemo:'mòd demo',vWait:'N ap verifye...',errVer:'Verifye ID a anvan ou kontinye.',errDup:'ID tranzaksyon sa a deja itilize.',errTx:'Antre ID tranzaksyon an (omwen 6 karaktè).',errSel:'Chwazi omwen yon pake.',sRecv:'Resevwa',ordP:'Kòmand an kous',ordR:'Kòmand resevwa',ordX:'Kòmand anile',rcB:'Wè resi',rcT:'Resi peman',rcNo:'Resi no.',rcId:'ID jwè / imèl',rcAmt:'Montan',rcPay:'Peman',rcNum:'Nimewo ou',rcDate:'Dat',rcSt:'Estati',rcSend:'Kijan ou vle resevwa resi a?',rcWa:'Sou WhatsApp',rcSite:'Sou sit la sèlman',rcOk:'Kontinye',secT:'Sekirite kont',curP:'Modpas aktyèl',newPw:'Nouvo modpas (omwen 6)',chPw:'Chanje modpas',delAcc:'Siprime kont mwen',delQ:'Siprime kont ou ak tout kòmand yo pou tout bon?',pwOk:'Modpas chanje.',errCur:'Modpas aktyèl la pa kòrèk.',errNew:'Nouvo modpas la dwe gen omwen 6 karaktè.',delOk:'Kont siprime.',gdT:'Kisa chak sèvis la ye',gP:'Antre Player ID ou, verifye non kont lan, chwazi pake a epi peye.',gE:'Antre imèl kont ou, chwazi plan an epi peye.',q3:'Kijan mwen peye?',a3:'Chwazi MonCash oswa Natcash, voye lajan an sou nimewo ki parèt la, epi antre non ou, nimewo ou ak ID tranzaksyon an.',q4:'Èske m ka jwenn yon ranbousman?',a4:'Si kòmand lan pa livre epi ou te peye, nou refè l oswa nou ranbouse w. Ekri nou sou WhatsApp.',q5:'Mwen bliye modpas mwen.',a5:'Ekri nou sou WhatsApp ak imèl kont lan, epi n ap ede w rekipere l.',q6:'Èske peman an an sekirite?',a6:'Ou peye dirèkteman sou kont MonCash oswa Natcash nou. Yon ID tranzaksyon sèvi yon sèl fwa, epi n ap verifye l anvan n livre.'},
+en:{login:'Log in',signup:'Sign up',reg:'Log in / Sign up',logout:'Log out',dash:'My account',
+h1:'Top up Free Fire and subscriptions in minutes',h2:'Pay with MonCash or Natcash. Enter your ID, pick a package, and confirm with your Access Code.',
+ffT:'Free Fire services',ffS:'Pick your account server',stT:'Streaming subscriptions',stS:'Netflix and Prime Video',from:'From',
+d_ffna:'Diamonds for N/A server accounts',d_lvl:'Free Fire level up pass',d_eu:'For accounts on the Europe server',d_latam:'For accounts on the Latin America server',d_nf:'Netflix subscription',d_pv:'Prime Video subscription',
+name:'Name',email:'Email',pass:'Password',pin:'Access Code (4 to 6 digits)',pinH:'This code protects your account and your transactions.',mk:'Create account',ent:'Log in',
+pid:'Player ID',pkg:'Package',payM:'Payment method',total:'Total',conf:'Confirm purchase',pinC:'Access Code to confirm',
+errF:'Fill in every field.',errP:'The Access Code must have 4 to 6 digits.',errL:'Wrong email or password.',errEx:'This email already has an account.',errPin:'Wrong Access Code.',
+need:'Log in before you buy.',okOrd:'Order saved. Send the payment to',hello:'Hello',acct:'Account details',code:'Access Code',chg:'Change',newP:'New Access Code',save:'Save',
+ord:'My orders',none:'No orders yet.',pend:'Pending',close:'Close',rights:'All rights reserved.',pinOk:'Access Code updated.',mo1:'1 month',mo3:'3 months',cart:'Cart',addC:'Add to cart',added:'Added to cart.',emptyC:'Your cart is empty.',phone:'Number you are paying from (MonCash/Natcash)',errPh:'Enter a valid Haiti number (8 digits).',recT:'Recharge your Sledy Top-Up account',recS:'Add funds so you are always ready. You can add it to your cart too.',d_wal:'Funds for your Sledy Top-Up account (minimum 150 HTG)',bal:'Balance',rech:'Recharge account',ok:'Confirmed',fAbout:'Free Fire top-ups and streaming subscriptions in Haiti.',fServ:'Services',fPay:'Accepted payments',sOrd:'Orders',sPend:'In progress',sSpent:'Confirmed spend',paid:'Verifying',cx:'Cancelled',wT:'What to do now',w1:'Send %a HTG on %m to %n.',w2:'Enter the name and number you use on MonCash or Natcash below, then tap "I have paid".',w3:'Wait for confirmation. It usually takes a few minutes.',paidB:'I have paid',txid:'Transaction ID',cancel:'Cancel',copy:'Copy number',copied:'Number copied.',ref:'Ref',sup:'Help on WhatsApp',hwT:'How it works',hw1:'Create your account and set your Access Code.',hw2:'Pick a service and add it to your cart.',hw3:'Pay with MonCash or Natcash.',hw4:'Get your delivery after confirmation.',faqT:'Common questions',q1:'How long does delivery take?',a1:'Delivery usually takes 5 to 30 minutes after we confirm your payment.',q2:'What if I typed the wrong ID?',a2:'If the order is still "In progress", cancel it and redo it with the right ID. If it is already delivered, message us on WhatsApp.',w4:'We verify the payment automatically. The order is delivered only if the money arrives.',pName:'Name on your MonCash/Natcash',pNum:'MonCash/Natcash number',opt:'optional',back:'Back',amt:'Amount (minimum 150 HTG)',errMin:'The minimum recharge is 150 HTG.',mo6:'6 months',mo12:'12 months',vSkip:'Account name check is not available. Make sure the ID is correct.',noPay:'Automatic payment is not available right now.',noApi:'Automatic payment is not active yet. Contact us.',coHow:'You will complete the payment after you confirm the order.',payLineApi:'To finish the payment, go to My account > Orders and tap "Pay with MonCash/NatCash".',stp1:'Order',stp2:'Payment',stp3:'Verification',stp4:'Delivery',payTot:'Total to pay',payNowB:'Pay with %m',apiHint:'You will go to the secure page. The payment is verified automatically, you do not need to enter anything.',manT:'Pay manually',verT:'Checking your payment...',verD:'It usually takes a few minutes. This page updates by itself.',chkB:'Check now',chkNo:'The payment has not arrived yet.',payErr:'We could not start the payment. Try again.',payFail:'The payment did not go through. Try again.',grpN:'%n items in the same payment',slipT:'Pending slip',okT:'Order successful',slipN:'You will get the receipt once you receive your order.',nfT:'Notifications',nfAll:'Mark all as read',nfNone:'No notifications.',nPend:'Your pending slip is ready. Send the payment so we can continue.',nPaid:'We are checking your payment.',nOk:'Your order was successful! The receipt is available.',nCx:'The order was cancelled.',nOkT:'Order successful: %p',waN:'WhatsApp number',accHW:'Enter your WhatsApp number (with country code). You will receive the account there.',gW:'Enter your WhatsApp number, pick a plan and pay.',waMsg:'You will receive your account on WhatsApp within 6 to 12 hours. If it takes longer, contact us.',ctc:'Contact us',errWa:'Enter a valid WhatsApp number (with country code).',share:'Share',linkCp:'Link copied.',yourOrder:'Your order',subT:'Subtotal',pmMon:'Pay with your MonCash account, securely.',pmNat:'Pay with your NatCash account, securely.',pmBal:'Balance',pmBalD:'Pay directly with your Sledy Top-Up balance.',errBal:'Not enough balance.',feeN:'A %p% fee is added for %m payments.',feeL:'Fee',tAcc:'I have read and accept the',tLnk:'terms and conditions',errTerms:'You must accept the terms.',payB:'Pay %a HTG',goCo:'Continue to payment',tT:'Terms and conditions',tB:'Delivery happens after we confirm your payment.|You are responsible for the ID or email you enter. Check it before paying.|A transaction ID can be used only once. Trying to reuse it can get your account blocked.|If the order is not delivered and you paid, we redo it or refund you.',stepPk:'Choose your package',reqd:'Required',buyNow:'Buy now',accHP:'Enter your Player ID to continue.',accHE:'Enter the account email to continue.',pBd1:'Fast delivery',pBd2:'MonCash & Natcash',coT:'Confirm your payment',catDia:'Diamonds',catStr:'Streaming',navHome:'Home',navRec:'Top-up',pwW:'Weak',pwM:'Fair',pwS:'Strong',errWeak:'The password needs 8 characters with an uppercase letter, a lowercase letter and a number.',errPinW:'That Access Code is too simple. Avoid 0000 or 1234.',errBan:'This account is blocked. Contact support on WhatsApp.',warnDup:'Warning: %n/5 attempts with the same transaction ID. At 5 your account will be blocked.',rcPdf:'Download PDF',rcWaB:'Send on WhatsApp',re:'Reorder',topT:'Most popular on the site',lockT:'Log in to see the services and prices.',srch:'Search for a service...',noRes:'No results.',vBtn:'Verify ID',vAcc:'Account name',vNo:'We could not find this ID.',vDemo:'demo mode',vWait:'Checking...',errVer:'Verify the ID before you continue.',errDup:'This transaction ID was already used.',errTx:'Enter the transaction ID (at least 6 characters).',errSel:'Pick at least one package.',sRecv:'Received',ordP:'Orders in progress',ordR:'Orders received',ordX:'Cancelled orders',rcB:'View receipt',rcT:'Payment receipt',rcNo:'Receipt no.',rcId:'Player ID / email',rcAmt:'Amount',rcPay:'Payment',rcNum:'Your number',rcDate:'Date',rcSt:'Status',rcSend:'How do you want to get the receipt?',rcWa:'On WhatsApp',rcSite:'On the site only',rcOk:'Continue',secT:'Account security',curP:'Current password',newPw:'New password (min. 6)',chPw:'Change password',delAcc:'Delete my account',delQ:'Permanently delete your account and all orders?',pwOk:'Password changed.',errCur:'Current password is wrong.',errNew:'The new password needs at least 6 characters.',delOk:'Account deleted.',gdT:'What each service is',gP:'Enter your Player ID, verify the account name, pick a package and pay.',gE:'Enter your account email, pick a plan and pay.',q3:'How do I pay?',a3:'Choose MonCash or Natcash, send the money to the number shown, then enter your name, your number and the transaction ID.',q4:'Can I get a refund?',a4:'If the order is not delivered and you paid, we redo it or refund you. Message us on WhatsApp.',q5:'I forgot my password.',a5:'Message us on WhatsApp with your account email and we will help you recover it.',q6:'Is the payment safe?',a6:'You pay straight to our MonCash or Natcash account. A transaction ID works only once and we check it before delivering.'},
+fr:{login:'Connexion',signup:'Inscription',reg:'Connexion / Inscription',logout:'Déconnexion',dash:'Mon compte',
+h1:'Rechargez Free Fire et vos abonnements en quelques minutes',h2:'Payez avec MonCash ou Natcash. Saisissez votre ID, choisissez un pack et confirmez avec votre Code d’accès.',
+ffT:'Services Free Fire',ffS:'Choisissez le serveur de votre compte',stT:'Abonnements streaming',stS:'Netflix et Prime Video',from:'À partir de',
+d_ffna:'Diamants pour les comptes du serveur N/A',d_lvl:'Pass level up Free Fire',d_eu:'Pour les comptes du serveur Europe',d_latam:'Pour les comptes du serveur Amérique latine',d_nf:'Abonnement Netflix',d_pv:'Abonnement Prime Video',
+name:'Nom',email:'E-mail',pass:'Mot de passe',pin:'Code d’accès (4 à 6 chiffres)',pinH:'Ce code protège votre compte et vos transactions.',mk:'Créer le compte',ent:'Se connecter',
+pid:'Player ID',pkg:'Pack',payM:'Moyen de paiement',total:'Total',conf:'Confirmer l’achat',pinC:'Code d’accès pour confirmer',
+errF:'Remplissez tous les champs.',errP:'Le code d’accès doit avoir 4 à 6 chiffres.',errL:'E-mail ou mot de passe incorrect.',errEx:'Cet e-mail a déjà un compte.',errPin:'Code d’accès incorrect.',
+need:'Connectez-vous avant d’acheter.',okOrd:'Commande enregistrée. Envoyez le paiement au',hello:'Bonjour',acct:'Infos du compte',code:'Code d’accès',chg:'Modifier',newP:'Nouveau code d’accès',save:'Enregistrer',
+ord:'Mes commandes',none:'Aucune commande pour le moment.',pend:'En attente',close:'Fermer',rights:'Tous droits réservés.',pinOk:'Code d’accès modifié.',mo1:'1 mois',mo3:'3 mois',cart:'Panier',addC:'Ajouter au panier',added:'Ajouté au panier.',emptyC:'Votre panier est vide.',phone:'Numéro avec lequel vous payez (MonCash/Natcash)',errPh:'Entrez un numéro haïtien valide (8 chiffres).',recT:'Rechargez votre compte Sledy Top-Up',recS:'Ajoutez des fonds pour être toujours prêt. Vous pouvez aussi l’ajouter au panier.',d_wal:'Fonds pour votre compte Sledy Top-Up (minimum 150 HTG)',bal:'Solde',rech:'Recharger le compte',ok:'Confirmé',fAbout:'Recharges Free Fire et abonnements streaming en Haïti.',fServ:'Services',fPay:'Paiements acceptés',sOrd:'Commandes',sPend:'En cours',sSpent:'Dépenses confirmées',paid:'Vérification',cx:'Annulée',wT:'Ce que vous devez faire maintenant',w1:'Envoyez %a HTG via %m au %n.',w2:'Saisissez ci-dessous le nom et le numéro de votre compte MonCash ou Natcash, puis touchez « J’ai payé ».',w3:'Attendez la confirmation. Cela prend généralement quelques minutes.',paidB:'J’ai payé',txid:'ID de transaction',cancel:'Annuler',copy:'Copier le numéro',copied:'Numéro copié.',ref:'Réf',sup:'Aide sur WhatsApp',hwT:'Comment ça marche',hw1:'Créez votre compte et définissez votre Code d’accès.',hw2:'Choisissez un service et ajoutez-le au panier.',hw3:'Payez avec MonCash ou Natcash.',hw4:'Recevez votre livraison après confirmation.',faqT:'Questions fréquentes',q1:'Combien de temps dure la livraison ?',a1:'La livraison prend généralement 5 à 30 minutes après la confirmation du paiement.',q2:'Et si je me trompe d’ID ?',a2:'Si la commande est encore « En cours », annulez-la et refaites-la avec le bon ID. Si elle est livrée, écrivez-nous sur WhatsApp.',w4:'Nous vérifions le paiement automatiquement. La commande n’est livrée que si l’argent arrive.',pName:'Nom sur votre MonCash/Natcash',pNum:'Numéro MonCash/Natcash',opt:'facultatif',back:'Retour',amt:'Montant (minimum 150 HTG)',errMin:'Le rechargement minimum est de 150 HTG.',mo6:'6 mois',mo12:'12 mois',vSkip:'La vérification du nom n’est pas disponible. Assurez-vous que l’ID est correct.',noPay:'Le paiement automatique n’est pas disponible pour le moment.',noApi:'Le paiement automatique n’est pas encore actif. Contactez-nous.',coHow:'Vous finaliserez le paiement après avoir confirmé la commande.',payLineApi:'Pour finaliser le paiement, allez dans Mon compte > Commandes et touchez « Payer avec MonCash/NatCash ».',stp1:'Commande',stp2:'Paiement',stp3:'Vérification',stp4:'Livraison',payTot:'Total à payer',payNowB:'Payer avec %m',apiHint:'Vous serez redirigé vers la page sécurisée. Le paiement est vérifié automatiquement, rien à saisir.',manT:'Payer manuellement',verT:'Vérification du paiement...',verD:'Cela prend généralement quelques minutes. La page se met à jour seule.',chkB:'Vérifier maintenant',chkNo:'Le paiement n’est pas encore arrivé.',payErr:'Impossible de démarrer le paiement. Réessayez.',payFail:'Le paiement n’a pas abouti. Réessayez.',grpN:'%n articles dans le même paiement',slipT:'Fiche en attente',okT:'Commande réussie',slipN:'Vous obtiendrez le reçu après réception de votre commande.',nfT:'Notifications',nfAll:'Tout marquer comme lu',nfNone:'Aucune notification.',nPend:'Votre fiche en attente est prête. Envoyez le paiement pour continuer.',nPaid:'Nous vérifions votre paiement.',nOk:'Votre commande est réussie ! Le reçu est disponible.',nCx:'La commande a été annulée.',nOkT:'Commande réussie : %p',waN:'Numéro WhatsApp',accHW:'Saisissez votre numéro WhatsApp (avec indicatif). Vous y recevrez le compte.',gW:'Saisissez votre numéro WhatsApp, choisissez une formule et payez.',waMsg:'Vous recevrez votre compte sur WhatsApp sous 6 à 12 heures. Au-delà, contactez-nous.',ctc:'Contactez-nous',errWa:'Entrez un numéro WhatsApp valide (avec indicatif).',share:'Partager',linkCp:'Lien copié.',yourOrder:'Votre commande',subT:'Sous-total',pmMon:'Payez avec votre compte MonCash en toute sécurité.',pmNat:'Payez avec votre compte NatCash en toute sécurité.',pmBal:'Solde',pmBalD:'Payez directement avec votre solde Sledy Top-Up.',errBal:'Solde insuffisant.',feeN:'Des frais de %p % sont ajoutés pour le paiement %m.',feeL:'Frais',tAcc:'J’ai lu et j’accepte les',tLnk:'conditions générales',errTerms:'Vous devez accepter les conditions.',payB:'Payer %a HTG',goCo:'Passer au paiement',tT:'Conditions générales',tB:'La livraison a lieu après la confirmation du paiement.|Vous êtes responsable de l’ID ou de l’e-mail saisi. Vérifiez-le avant de payer.|Un ID de transaction ne peut servir qu’une fois. Tenter de le réutiliser peut bloquer votre compte.|Si la commande n’est pas livrée et que vous avez payé, nous la refaisons ou vous remboursons.',stepPk:'Choisissez votre pack',reqd:'Obligatoire',buyNow:'Acheter maintenant',accHP:'Saisissez votre Player ID pour continuer.',accHE:'Saisissez l’e-mail du compte pour continuer.',pBd1:'Livraison rapide',pBd2:'MonCash et Natcash',coT:'Confirmer le paiement',catDia:'Diamants',catStr:'Streaming',navHome:'Accueil',navRec:'Recharge',pwW:'Faible',pwM:'Moyen',pwS:'Fort',errWeak:'Le mot de passe doit avoir 8 caractères avec une majuscule, une minuscule et un chiffre.',errPinW:'Ce code est trop simple. Évitez 0000 ou 1234.',errBan:'Ce compte est bloqué. Contactez le support sur WhatsApp.',warnDup:'Attention : %n/5 tentatives avec le même ID de transaction. À 5, votre compte sera bloqué.',rcPdf:'Télécharger le PDF',rcWaB:'Envoyer sur WhatsApp',re:'Recommander',topT:'Les plus demandés',lockT:'Connectez-vous pour voir les services et les prix.',srch:'Rechercher un service...',noRes:'Aucun résultat.',vBtn:'Vérifier l’ID',vAcc:'Nom du compte',vNo:'ID introuvable.',vDemo:'mode démo',vWait:'Vérification...',errVer:'Vérifiez l’ID avant de continuer.',errDup:'Cet ID de transaction a déjà été utilisé.',errTx:'Saisissez l’ID de transaction (6 caractères minimum).',errSel:'Choisissez au moins un pack.',sRecv:'Reçues',ordP:'Commandes en cours',ordR:'Commandes reçues',ordX:'Commandes annulées',rcB:'Voir le reçu',rcT:'Reçu de paiement',rcNo:'Reçu n°',rcId:'ID joueur / e-mail',rcAmt:'Montant',rcPay:'Paiement',rcNum:'Votre numéro',rcDate:'Date',rcSt:'Statut',rcSend:'Comment voulez-vous recevoir le reçu ?',rcWa:'Sur WhatsApp',rcSite:'Sur le site seulement',rcOk:'Continuer',secT:'Sécurité du compte',curP:'Mot de passe actuel',newPw:'Nouveau mot de passe (6 min.)',chPw:'Changer le mot de passe',delAcc:'Supprimer mon compte',delQ:'Supprimer définitivement votre compte et vos commandes ?',pwOk:'Mot de passe modifié.',errCur:'Mot de passe actuel incorrect.',errNew:'Le nouveau mot de passe doit avoir 6 caractères minimum.',delOk:'Compte supprimé.',gdT:'Ce que contient chaque service',gP:'Saisissez votre Player ID, vérifiez le nom du compte, choisissez un pack et payez.',gE:'Saisissez l’e-mail du compte, choisissez une formule et payez.',q3:'Comment payer ?',a3:'Choisissez MonCash ou Natcash, envoyez l’argent au numéro affiché, puis saisissez votre nom, votre numéro et l’ID de transaction.',q4:'Puis-je être remboursé ?',a4:'Si la commande n’est pas livrée et que vous avez payé, nous la refaisons ou vous remboursons. Écrivez-nous sur WhatsApp.',q5:'J’ai oublié mon mot de passe.',a5:'Écrivez-nous sur WhatsApp avec l’e-mail du compte et nous vous aiderons.',q6:'Le paiement est-il sûr ?',a6:'Vous payez directement sur notre compte MonCash ou Natcash. Un ID de transaction ne sert qu’une fois et nous le vérifions avant de livrer.'},
+es:{login:'Iniciar sesión',signup:'Registrarse',reg:'Entrar / Registrarse',logout:'Cerrar sesión',dash:'Mi cuenta',
+h1:'Recarga Free Fire y tus suscripciones en minutos',h2:'Paga con MonCash o Natcash. Escribe tu ID, elige un paquete y confirma con tu Código de acceso.',
+ffT:'Servicios Free Fire',ffS:'Elige el servidor de tu cuenta',stT:'Suscripciones de streaming',stS:'Netflix y Prime Video',from:'Desde',
+d_ffna:'Diamantes para cuentas del servidor N/A',d_lvl:'Pase de subida de nivel de Free Fire',d_eu:'Para cuentas del servidor Europa',d_latam:'Para cuentas del servidor Latinoamérica',d_nf:'Suscripción a Netflix',d_pv:'Suscripción a Prime Video',
+name:'Nombre',email:'Correo',pass:'Contraseña',pin:'Código de acceso (4 a 6 dígitos)',pinH:'Este código protege tu cuenta y tus transacciones.',mk:'Crear cuenta',ent:'Entrar',
+pid:'Player ID',pkg:'Paquete',payM:'Método de pago',total:'Total',conf:'Confirmar compra',pinC:'Código de acceso para confirmar',
+errF:'Completa todos los campos.',errP:'El código de acceso debe tener de 4 a 6 dígitos.',errL:'Correo o contraseña incorrectos.',errEx:'Este correo ya tiene una cuenta.',errPin:'Código de acceso incorrecto.',
+need:'Inicia sesión antes de comprar.',okOrd:'Pedido guardado. Envía el pago a',hello:'Hola',acct:'Datos de la cuenta',code:'Código de acceso',chg:'Cambiar',newP:'Nuevo código de acceso',save:'Guardar',
+ord:'Mis pedidos',none:'Aún no hay pedidos.',pend:'Pendiente',close:'Cerrar',rights:'Todos los derechos reservados.',pinOk:'Código de acceso actualizado.',mo1:'1 mes',mo3:'3 meses',cart:'Carrito',addC:'Añadir al carrito',added:'Añadido al carrito.',emptyC:'Tu carrito está vacío.',phone:'Número desde el que pagas (MonCash/Natcash)',errPh:'Escribe un número válido de Haití (8 dígitos).',recT:'Recarga tu cuenta Sledy Top-Up',recS:'Añade fondos para estar siempre listo. También puedes añadirlo al carrito.',d_wal:'Fondos para tu cuenta Sledy Top-Up (mínimo 150 HTG)',bal:'Saldo',rech:'Recargar cuenta',ok:'Confirmado',fAbout:'Recargas de Free Fire y suscripciones de streaming en Haití.',fServ:'Servicios',fPay:'Pagos aceptados',sOrd:'Pedidos',sPend:'En curso',sSpent:'Gasto confirmado',paid:'Verificando',cx:'Cancelado',wT:'Qué debes hacer ahora',w1:'Envía %a HTG por %m al %n.',w2:'Escribe abajo el nombre y el número de tu cuenta MonCash o Natcash y toca "Ya pagué".',w3:'Espera la confirmación. Suele tardar unos minutos.',paidB:'Ya pagué',txid:'ID de transacción',cancel:'Cancelar',copy:'Copiar número',copied:'Número copiado.',ref:'Ref',sup:'Ayuda por WhatsApp',hwT:'Cómo funciona',hw1:'Crea tu cuenta y define tu Código de acceso.',hw2:'Elige un servicio y añádelo al carrito.',hw3:'Paga con MonCash o Natcash.',hw4:'Recibe tu entrega tras la confirmación.',faqT:'Preguntas frecuentes',q1:'¿Cuánto tarda la entrega?',a1:'La entrega suele tardar de 5 a 30 minutos tras confirmar tu pago.',q2:'¿Y si escribo mal el ID?',a2:'Si el pedido sigue "En curso", cancélalo y rehazlo con el ID correcto. Si ya se entregó, escríbenos por WhatsApp.',w4:'Verificamos el pago automáticamente. El pedido se entrega solo si el dinero llega.',pName:'Nombre en tu MonCash/Natcash',pNum:'Número MonCash/Natcash',opt:'opcional',back:'Volver',amt:'Monto (mínimo 150 HTG)',errMin:'La recarga mínima es de 150 HTG.',mo6:'6 meses',mo12:'12 meses',vSkip:'La verificación del nombre no está disponible. Asegúrate de que el ID sea correcto.',noPay:'El pago automático no está disponible por ahora.',noApi:'El pago automático aún no está activo. Contáctanos.',coHow:'Completarás el pago después de confirmar el pedido.',payLineApi:'Para completar el pago, ve a Mi cuenta > Pedidos y toca "Pagar con MonCash/NatCash".',stp1:'Pedido',stp2:'Pago',stp3:'Verificación',stp4:'Entrega',payTot:'Total a pagar',payNowB:'Pagar con %m',apiHint:'Irás a la página segura. El pago se verifica automáticamente, no tienes que escribir nada.',manT:'Pagar manualmente',verT:'Verificando tu pago...',verD:'Suele tardar unos minutos. La página se actualiza sola.',chkB:'Verificar ahora',chkNo:'El pago aún no ha llegado.',payErr:'No pudimos iniciar el pago. Inténtalo de nuevo.',payFail:'El pago no se completó. Inténtalo de nuevo.',grpN:'%n artículos en el mismo pago',slipT:'Ficha pendiente',okT:'Pedido exitoso',slipN:'Obtendrás el recibo cuando recibas tu pedido.',nfT:'Notificaciones',nfAll:'Marcar todo como leído',nfNone:'Sin notificaciones.',nPend:'Tu ficha pendiente está lista. Envía el pago para continuar.',nPaid:'Estamos verificando tu pago.',nOk:'¡Tu pedido fue exitoso! El recibo está disponible.',nCx:'El pedido fue cancelado.',nOkT:'Pedido exitoso: %p',waN:'Número de WhatsApp',accHW:'Escribe tu número de WhatsApp (con prefijo). Ahí recibirás la cuenta.',gW:'Escribe tu número de WhatsApp, elige un plan y paga.',waMsg:'Recibirás tu cuenta por WhatsApp en un plazo de 6 a 12 horas. Si se supera, contáctanos.',ctc:'Contáctanos',errWa:'Escribe un número de WhatsApp válido (con prefijo).',share:'Compartir',linkCp:'Enlace copiado.',yourOrder:'Tu pedido',subT:'Subtotal',pmMon:'Paga con tu cuenta MonCash de forma segura.',pmNat:'Paga con tu cuenta NatCash de forma segura.',pmBal:'Saldo',pmBalD:'Paga directamente con tu saldo Sledy Top-Up.',errBal:'Saldo insuficiente.',feeN:'Se añade una comisión del %p % en pagos con %m.',feeL:'Comisión',tAcc:'He leído y acepto los',tLnk:'términos y condiciones',errTerms:'Debes aceptar los términos.',payB:'Pagar %a HTG',goCo:'Continuar al pago',tT:'Términos y condiciones',tB:'La entrega se hace tras confirmar tu pago.|Eres responsable del ID o correo que escribes. Revísalo antes de pagar.|Un ID de transacción solo se puede usar una vez. Intentar reutilizarlo puede bloquear tu cuenta.|Si el pedido no se entrega y pagaste, lo rehacemos o te reembolsamos.',stepPk:'Elige tu paquete',reqd:'Obligatorio',buyNow:'Comprar ahora',accHP:'Escribe tu ID de jugador para continuar.',accHE:'Escribe el correo de la cuenta para continuar.',pBd1:'Entrega rápida',pBd2:'MonCash y Natcash',coT:'Confirma tu pago',catDia:'Diamantes',catStr:'Streaming',navHome:'Inicio',navRec:'Recarga',pwW:'Débil',pwM:'Media',pwS:'Fuerte',errWeak:'La contraseña necesita 8 caracteres con mayúscula, minúscula y un número.',errPinW:'Ese código es demasiado simple. Evita 0000 o 1234.',errBan:'Esta cuenta está bloqueada. Contacta con soporte por WhatsApp.',warnDup:'Aviso: %n/5 intentos con el mismo ID de transacción. A los 5 tu cuenta se bloqueará.',rcPdf:'Descargar PDF',rcWaB:'Enviar por WhatsApp',re:'Volver a pedir',topT:'Más populares',lockT:'Inicia sesión para ver los servicios y precios.',srch:'Buscar un servicio...',noRes:'Sin resultados.',vBtn:'Verificar ID',vAcc:'Nombre de la cuenta',vNo:'No encontramos este ID.',vDemo:'modo demo',vWait:'Verificando...',errVer:'Verifica el ID antes de continuar.',errDup:'Este ID de transacción ya fue usado.',errTx:'Escribe el ID de transacción (mínimo 6 caracteres).',errSel:'Elige al menos un paquete.',sRecv:'Recibidos',ordP:'Pedidos en curso',ordR:'Pedidos recibidos',ordX:'Pedidos cancelados',rcB:'Ver recibo',rcT:'Recibo de pago',rcNo:'Recibo n.º',rcId:'ID de jugador / correo',rcAmt:'Monto',rcPay:'Pago',rcNum:'Tu número',rcDate:'Fecha',rcSt:'Estado',rcSend:'¿Cómo quieres recibir el recibo?',rcWa:'Por WhatsApp',rcSite:'Solo en el sitio',rcOk:'Continuar',secT:'Seguridad de la cuenta',curP:'Contraseña actual',newPw:'Nueva contraseña (mín. 6)',chPw:'Cambiar contraseña',delAcc:'Eliminar mi cuenta',delQ:'¿Eliminar tu cuenta y todos tus pedidos para siempre?',pwOk:'Contraseña cambiada.',errCur:'La contraseña actual es incorrecta.',errNew:'La nueva contraseña debe tener al menos 6 caracteres.',delOk:'Cuenta eliminada.',gdT:'Qué es cada servicio',gP:'Escribe tu Player ID, verifica el nombre de la cuenta, elige un paquete y paga.',gE:'Escribe el correo de la cuenta, elige un plan y paga.',q3:'¿Cómo pago?',a3:'Elige MonCash o Natcash, envía el dinero al número indicado y escribe tu nombre, tu número y el ID de transacción.',q4:'¿Puedo pedir un reembolso?',a4:'Si el pedido no se entrega y pagaste, lo rehacemos o te reembolsamos. Escríbenos por WhatsApp.',q5:'Olvidé mi contraseña.',a5:'Escríbenos por WhatsApp con el correo de la cuenta y te ayudaremos.',q6:'¿Es seguro el pago?',a6:'Pagas directamente a nuestra cuenta MonCash o Natcash. Un ID de transacción solo sirve una vez y lo verificamos antes de entregar.'}
+};
+
+/* ===== EDIT HERE: your numbers, WhatsApp and server ===== */
+const CONFIG={
+  MONCASH:{number:'+509 0000-0000',name:'Your name'}, /* MonCash account that receives payments */
+  NATCASH:{number:'+509 0000-0000',name:'Your name'}, /* Natcash account that receives payments */
+  WHATSAPP:'50900000000',                               /* digits only, with country code */
+  FEE:{MonCash:0,Natcash:0}, /* e.g. MonCash:0.01 adds a 1% fee when the customer pays with MonCash */
+  DEMO:true, /* true = demo ID check (no real name lookup). Set false once your server is ready */
+  API:''                                                /* Your server, e.g. 'https://yourdomain.com/api'. Endpoints the site calls (all POST, JSON):
+     /pay    {id,orderIds,method,amount,payerNumber,description,returnUrl} -> {url?,ref?}   start a MonCash/NatCash payment (url = secure payment page)
+     /verify {id,orderIds,method,amount,payerName,payerNumber,txid,type,target} -> {paid:true} | {failed:true} | {duplicate:true} | {paid:false}
+     /player?game=freefire&region=..&id=.. (GET) -> {name}    Free Fire account name
+     /receipt {orders,channel} -> any   send the receipt (WhatsApp) */
+};
+let ST={};try{ST=JSON.parse(localStorage.getItem('sledy_settings')||'{}')}catch(e){}
+['MONCASH','NATCASH'].forEach(k=>ST[k]&&Object.assign(CONFIG[k],ST[k]));if(ST.WHATSAPP)CONFIG.WHATSAPP=ST.WHATSAPP;
+let MINREC=+ST.minrec||150;
+const PAYNUM={MonCash:CONFIG.MONCASH.number,Natcash:CONFIG.NATCASH.number};
+const WA=CONFIG.WHATSAPP;
+const payTo=pm=>PAYNUM[pm]+' ('+CONFIG[pm.toUpperCase()].name+')';
+const PHRE=/^(\+?509)?[\s-]?\d{4}[\s-]?\d{4}$/;
+const amt=it=>(it.a||PR[it.k].o[it.o][1])*(it.q||1);
+const itLab=it=>(it.a?it.a+' HTG':lab(PR[it.k].o[it.o]))+((it.q||1)>1?' x'+it.q:'');
+const svg=b=>'<svg viewBox="0 0 64 64" aria-hidden="true">'+b+'</svg>';
+const dia=svg('<path d="M32 6 56 24 32 58 8 24Z" fill="#fff" fill-opacity=".93"/><path d="M8 24h48M22 24 32 6l10 18-10 34Z" stroke="#0D1117" stroke-opacity=".3" fill="none"/>');
+const play=c=>svg('<rect x="6" y="14" width="52" height="36" rx="8" fill="#fff" fill-opacity=".93"/><path d="M27 23v18l15-9Z" fill="'+c+'"/>');
+const IC={ffna:dia,eu:dia,latam:dia,
+ lvl:svg('<path d="M12 38 32 18l20 20M12 54 32 34l20 20" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'),
+ nf:play('#E50914'),pv:play('#00A8E1'),
+ wal:svg('<rect x="6" y="16" width="52" height="34" rx="7" fill="#fff" fill-opacity=".93"/><rect x="38" y="28" width="20" height="12" rx="5" fill="#0D1117" fill-opacity=".75"/><circle cx="46" cy="34" r="2.5" fill="#00F0FF"/>')};
+let CAT=null,PR={};
+function setCat(c){CAT=c;PR={};(c.items||[]).forEach(i=>{if(i.on!==0&&i.on!==false)PR[i.k]=i});PR.wal={n:'Sledy Top-Up',id:'none',o:[['150 HTG',150]],hide:1}}
+const idKey=p=>p.id=='email'?'email':p.id=='wa'?'waN':'pid';
+const WARE=/^\+?\d[\d\s-]{6,16}\d$/;
+const dsc=p=>p.dt||t(p.d||'');
+const clone=o=>JSON.parse(JSON.stringify(o));
+try{setCat(JSON.parse(localStorage.getItem('sledy_catalog')||'null')||clone(SLEDY_DEF))}catch(e){setCat(clone(SLEDY_DEF))}
+if(location.protocol.indexOf('http')==0&&!localStorage.getItem('sledy_catalog'))fetch('catalog.json').then(r=>r.ok?r.json():null).then(j=>{if(j&&j.items){setCat(j);render()}}).catch(()=>{});
+
+const $=s=>document.querySelector(s);
+const LS=(k,v)=>v===undefined?JSON.parse(localStorage.getItem(k)||'null'):localStorage.setItem(k,JSON.stringify(v));
+let lang=localStorage.getItem('sledy_lang')||'ht',cur=null,mode='login';
+const t=k=>T[lang][k]??T.en[k]??k;
+const lab=o=>o[0][0]=='@'?t(o[0].slice(1)):o[0];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+async function hash(s){
+  if(!(window.crypto&&crypto.subtle))return btoa(unescape(encodeURIComponent(s)));
+  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+const BAN=()=>LS('sledy_ban')||{};
+const isBanned=e=>!!(BAN()[e]&&BAN()[e].blocked);
+function strike(e){const b=BAN(),r=b[e]||(b[e]={strikes:0,blocked:false});r.strikes++;r.at=Date.now();if(r.strikes>=5){r.blocked=true;r.reason='dup-tx'}LS('sledy_ban',b);return r}
+const me=()=>{const e=LS('sledy_session');return e&&!isBanned(e)&&(LS('sledy_users')||{})[e]||null};
+const strong=p=>p.length>=8&&/[a-z]/.test(p)&&/[A-Z]/.test(p)&&/\d/.test(p);
+const weakPin=p=>/^(\d)\1+$/.test(p)||'0123456789'.includes(p)||'9876543210'.includes(p);
+function meter(p,bar,hint){
+  const sc=[p.length>=8,/[a-z]/.test(p),/[A-Z]/.test(p),/\d/.test(p),/[^A-Za-z0-9]/.test(p),p.length>=12].filter(Boolean).length;
+  const b=$(bar);b.style.width=(p?sc/6*100:0)+'%';b.style.background=sc<4?'var(--rd)':sc<6?'var(--or)':'#3ddc84';
+  $(hint).textContent=p?(strong(p)?t(sc<6?'pwM':'pwS'):t('errWeak')):'';
+}
+function toast(m){const e=$('#toast');e.textContent=m;e.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.display='none',5000)}
+const open=id=>$(id).classList.add('on'),shut=id=>$(id).classList.remove('on');
+
+function render(){
+  document.documentElement.lang=lang;langUI();
+  document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
+  const card=k=>{const p=PR[k],min=Math.min(...p.o.map(o=>o[1]));
+    return `<button class="card" data-k="${k}" data-s="${esc((p.n+' '+dsc(p)).toLowerCase())}"><div class="tile ${p.c||'t1'}">${IC[k]||dia}<span>${esc(p.m||p.n.slice(0,8))}</span>${p.img?`<img src="${p.img}" alt="">`:`<img src="img/${k}.jpg" alt="" loading="lazy" onerror="this.remove()">`}</div><div class="cb"><b>${esc(p.n)}</b><span>${esc(dsc(p))}</span><em>${p.fix||p.o.length==1?'':t('from')+' '}${min} HTG</em></div></button>`};
+  $('#sections').innerHTML=CAT.cats.map(c=>{const ks=Object.keys(PR).filter(k=>PR[k].cat==c.id&&!PR[k].hide);if(!ks.length)return '';
+    return `<div class="ban" id="sec-${c.id}" style="--img:url(img/sec-${c.id}.jpg)"><h2>${c.n?esc(c.n):t(c.tk)}</h2><p class="sub">${c.sk?t(c.sk):esc(c.sub||'')}</p></div><div class="grid">${ks.map(card).join('')}</div>`}).join('');
+  document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
+  $('#guide').innerHTML=Object.keys(PR).filter(k=>!PR[k].hide).map(k=>{const p=PR[k];return `<details><summary>${esc(p.n)}</summary><p>${esc(dsc(p))}${p.id=='none'?'':' '+t(p.id=='email'?'gE':p.id=='wa'?'gW':'gP')}</p></details>`}).join('');
+  $('#faq').innerHTML=[1,2,3,4,5,6].map(n=>`<details><summary>${t('q'+n)}</summary><p>${t('a'+n)}</p></details>`).join('');
+  const cnt={};(LS('sledy_orders')||[]).forEach(o=>{if(PR[o.k]&&!PR[o.k].hide)cnt[o.k]=(cnt[o.k]||0)+1});
+  const top=Object.keys(PR).filter(k=>!PR[k].hide).sort((a,b)=>(cnt[b]||0)-(cnt[a]||0)||(PR[b].hot?1:0)-(PR[a].hot?1:0)).slice(0,3);
+  $('#top3').innerHTML=`<small>${t('topT')}</small>`+top.map((k,i)=>`<div class="tp" style="--i:${i}"><i>#${i+1}</i><span>${esc(PR[k].n)}</span></div>`).join('');
+  $('#bnav').innerHTML=[['home','🏠',t('navHome'),''],...CAT.cats.map(c=>['c-'+c.id,c.e||'📦',c.n?c.n:t(c.nk||c.tk),'nv-c']),['rec','💳',t('navRec'),'nv-c'],['cart','🛒',t('cart'),''],['acct','👤',t('dash'),'']].map(([id,e,l,c])=>`<button data-go="${id}" class="${c}"><b>${e}</b>${esc(l)}</button>`).join('');
+  if(document.body.classList.contains('inco'))renderCo();
+  nfRender();
+  $('#ann').textContent=ST.announce||'';$('#ann').classList.toggle('dim',!ST.announce);
+  filter();
+  $('#cartN').textContent=cart().length;
+  if($('#cartOv').classList.contains('on'))drawCart();
+  document.querySelectorAll('.card').forEach(b=>b.onclick=()=>buy(b.dataset.k));
+  $('#aGo').textContent=t(mode=='login'?'ent':'mk');
+  const u=me();
+  $('#authBtn').classList.toggle('dim',!!u);$('#dashBtn').classList.toggle('dim',!u);$('#balBtn').classList.toggle('dim',!u);document.body.classList.toggle('guest',!u);$('#balN').textContent=u?(u.bal||0):0;
+  if(cur){$('#bIdL').textContent=t(idKey(PR[cur]));fillOpts();waNote()}
+  if(u&&document.body.classList.contains('indash'))dash();
+}
+function setMode(m){mode=m;
+  $('#fName').classList.toggle('dim',m=='login');$('#fPin').classList.toggle('dim',m=='login');$('#fMeter').classList.toggle('dim',m=='login');
+  $('#tLogin').classList.toggle('ghost',m!='login');$('#tSign').classList.toggle('ghost',m=='login');
+  $('#aPass').autocomplete=m=='login'?'current-password':'new-password';
+  $('#aErr').textContent='';$('#aGo').textContent=t(m=='login'?'ent':'mk');
+}
+$('#tLogin').onclick=()=>setMode('login');$('#tSign').onclick=()=>setMode('sign');
+$('#authBtn').onclick=()=>{setMode('login');open('#authOv')};
+
+$('#aGo').onclick=async()=>{
+  const mail=$('#aMail').value.trim().toLowerCase(),pw=$('#aPass').value,users=LS('sledy_users')||{},err=$('#aErr');
+  if(!mail||!pw)return err.textContent=t('errF');
+  if(mode=='login'){
+    if(isBanned(mail))return err.textContent=t('errBan');
+    const u=users[mail];
+    if(!u||u.pw!==await hash(mail+pw))return err.textContent=t('errL');
+  }else{
+    const nm=$('#aName').value.trim(),pin=$('#aPin').value;
+    if(!nm)return err.textContent=t('errF');
+    if(!/^\d{4,6}$/.test(pin))return err.textContent=t('errP');
+    if(weakPin(pin))return err.textContent=t('errPinW');
+    if(!strong(pw))return err.textContent=t('errWeak');
+    if(users[mail])return err.textContent=t('errEx');
+    users[mail]={name:nm,email:mail,pw:await hash(mail+pw),pin:await hash(mail+'pin'+pin)};
+    LS('sledy_users',users);
+  }
+  LS('sledy_session',mail);
+  ['#aName','#aMail','#aPass','#aPin'].forEach(s=>$(s).value='');
+  shut('#authOv');render();toast(t('hello')+', '+LS('sledy_users')[mail].name);
+};
+
+let ver=null,rcList=[];const Q={};
+function fillOpts(){
+  const p=PR[cur];
+  $('#bPk').innerHTML=p.o.map((o,n)=>{const q=Q[n]||0;return `<div class="pt2${q?' on':''}" data-n="${n}" tabindex="0" role="button" aria-pressed="${!!q}"><span class="ck">✓</span><b>${esc(lab(o))}</b><em>${o[1]} HTG</em>${q?`<div class="stp"><button type="button" data-d="-1" aria-label="-1">−</button><span>${q}</span><button type="button" data-d="1" aria-label="+1">+</button></div>`:''}</div>`}).join('');
+  price();
+}
+const sel=()=>Object.entries(Q).filter(([n,q])=>q>0).map(([n,q])=>({o:+n,q}));
+const price=()=>{$('#bTot').textContent=sel().reduce((n,x)=>n+PR[cur].o[x.o][1]*x.q,0)+' HTG'};
+const tog=e=>{const tile=e.target.closest('[data-n]');if(!tile)return;const n=+tile.dataset.n,b=e.target.closest('[data-d]');
+  if(b)Q[n]=Math.max(0,Math.min(20,(Q[n]||0)+ +b.dataset.d));else Q[n]=Q[n]?0:1;fillOpts();$('#bErr').textContent=''};
+$('#bPk').onclick=tog;
+$('#bPk').onkeydown=e=>{if((e.key=='Enter'||e.key==' ')&&e.target.matches('[data-n]')){e.preventDefault();tog(e)}};
+const cartKey=()=>{const u=me();return u?'sledy_cart_'+u.email:null};
+const cart=()=>{const k=cartKey();return k?(LS(k)||[]).filter(it=>PR[it.k]):[]};
+const setCart=a=>{const k=cartKey();if(k)LS(k,a);render()};
+function buy(k){
+  if(!me()){setMode('login');open('#authOv');return toast(t('need'))}
+  cur=k;const p=PR[k];
+  Object.keys(Q).forEach(x=>delete Q[x]);Q[0]=1;
+  document.body.classList.remove('indash','inco');document.body.classList.add('inprod');
+  $('#bTitle').textContent=p.n;$('#pDesc').textContent=dsc(p);
+  const pr=p.o.map(o=>o[1]),mn=Math.min(...pr),mx=Math.max(...pr);$('#pRange').textContent=(mn==mx?mn:mn+' - '+mx)+' HTG';
+  $('#pTile').innerHTML=`<div class="tile ${p.c||'t1'}">${IC[k]||dia}<span>${esc(p.m||p.n.slice(0,8))}</span>${p.img?`<img src="${p.img}" alt="">`:`<img src="img/${k}.jpg" alt="" onerror="this.remove()">`}</div>`;
+  $('#pAcc').classList.toggle('dim',p.id=='none');$('#vBtn').classList.toggle('dim',p.id!='pid');
+  $('#pAccH').textContent=t(p.id=='email'?'accHE':p.id=='wa'?'accHW':'accHP');$('#pIcon').textContent=p.id=='email'?'@':p.id=='wa'?'WA':'ID';
+  $('#bId').type=p.id=='email'?'email':p.id=='wa'?'tel':'text';$('#bId').value=(LS('sledy_lastid_'+me().email)||{})[k]||'';$('#bErr').textContent='';ver=null;$('#vOut').textContent='';
+  render0();scrollTo(0,0);
+}
+function waNote(){const el=$('#waNote'),p=PR[cur];el.classList.toggle('dim',!(p&&p.id=='wa'));el.innerHTML=esc(t('waMsg'))+` <a href="https://wa.me/${WA}" target="_blank" rel="noopener">${esc(t('ctc'))}</a>`}
+function render0(){$('#bIdL').textContent=t(idKey(PR[cur]));fillOpts();waNote()}
+const target=()=>PR[cur].id=='none'?me().email:$('#bId').value.trim();
+
+async function place(items,pm,phone,pin,err,rate=0){
+  const u=me();
+  if(!u){err.textContent=t('errBan');return false}
+  const bal=pm=='BAL';
+  if(!bal&&!PHRE.test(phone)){err.textContent=t('errPh');return false}
+  if(!pin){err.textContent=t('errF');return false}
+  if(u.pin!==await hash(u.email+'pin'+pin)){err.textContent=t('errPin');return false}
+  if(bal&&(u.bal||0)<items.reduce((n,it)=>n+amt(it),0)){err.textContent=t('errBal');return false}
+  const orders=LS('sledy_orders')||[],d=new Date().toLocaleString(),made=[],gid=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+  items.forEach(it=>{const a=amt(it),o={grp:gid,id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),u:u.email,k:it.k,p:PR[it.k].n,o:itLab(it),a,idt:PR[it.k].id,fee:bal?0:Math.round(a*rate),pm:bal?'Balans':pm,ph:bal?'':phone,to:it.to,gn:it.gn||'',it:{k:it.k,o:it.o,q:it.q,to:it.to,gn:it.gn,a:it.a},d,s:bal?'ok':'pend'};orders.unshift(o);made.push(o)});
+  if(bal){const us=LS('sledy_users');us[u.email].bal-=made.reduce((n,o)=>n+o.a,0);LS('sledy_users',us)}
+  LS('sledy_orders',orders);err.textContent='';nfRender();
+  return made;
+}
+function items(){
+  const to=target(),err=$('#bErr');err.textContent='';
+  if(!to){err.textContent=t('errF');return null}
+  if(PR[cur].id=='wa'&&!WARE.test(to)){err.textContent=t('errWa');return null}
+  const sl=sel();if(!sl.length){err.textContent=t('errSel');return null}
+  let gn='';
+  if(PR[cur].id=='pid'){if(!ver||ver.id!=to){err.textContent=t('errVer');return null}gn=ver.name}
+  {const kk='sledy_lastid_'+me().email,m=LS(kk)||{};m[cur]=to;LS(kk,m)}
+  return sl.map(x=>({k:cur,o:x.o,q:x.q,to,gn}));
+}
+async function lookup(id,region){
+  if(!CONFIG.API){if(CONFIG.DEMO)return{name:'Player '+id.slice(-4),demo:true};throw 0}
+  const r=await fetch(`${CONFIG.API}/player?game=freefire&region=${region}&id=${encodeURIComponent(id)}`);
+  if(r.status==501)return{name:'',skip:true};
+  const d=await r.json();if(!d.name)throw 0;return d;
+}
+$('#vBtn').onclick=async()=>{
+  const id=$('#bId').value.trim(),o=$('#vOut');ver=null;
+  if(!/^\d{6,14}$/.test(id)){o.textContent=t('vNo');return}
+  o.textContent=t('vWait');
+  try{const d=await lookup(id,cur);if(d.skip){ver={id,name:''};o.textContent=t('vSkip');return}ver={id,name:d.name};o.innerHTML=`${t('vAcc')}: <b>${esc(d.name)}</b>${d.demo?' ('+t('vDemo')+')':''}`}catch(e){o.textContent=t('vNo')}
+};
+$('#bId').addEventListener('input',()=>{ver=null;$('#vOut').textContent='';$('#bErr').textContent=''});
+$('#vBtn').addEventListener('click',()=>{$('#bErr').textContent=''});
+function rcRows(os){
+  const f=os[0],tot=os.reduce((n,o)=>n+o.a+(o.fee||0),0),r=[[t('rcNo'),os.map(o=>o.id.toUpperCase()).join(', ')],[t('rcDate'),f.d]];
+  os.forEach(o=>{r.push([o.p,o.o+' = '+o.a+' HTG']);r.push([t(o.idt=='wa'?'waN':'rcId'),o.to]);if(o.gn)r.push([t('vAcc'),o.gn])});
+  const fe=os.reduce((n,o)=>n+(o.fee||0),0);if(fe)r.push([t('feeL'),fe+' HTG']);
+  r.push([t('rcPay'),f.pm]);if(f.ph)r.push([t('rcNum'),f.ph]);r.push([t('rcSt'),t(f.s)],[t('rcAmt'),tot+' HTG']);
+  return r;
+}
+const payLine=os=>os[0].s=='pend'?t('payLineApi'):'';
+function rcText(os){return ['Sledy Top-Up | '+rcTitle(os),...rcRows(os).map(([a,b])=>a+': '+b),payLine(os),os.some(o=>o.idt=='wa')?t('waMsg'):''].filter(Boolean).join('\n')}
+const allOk=os=>os.every(o=>o.s=='ok');
+const rcTitle=os=>allOk(os)?t('okT'):t('slipT');
+function showReceipt(os){
+  rcList=os;const st=os[0].s,ok=allOk(os),wa=os.some(o=>o.idt=='wa');
+  $('#rcCard').innerHTML=`<div class="rch"><div class="rcl">${($('#logo svg')||{outerHTML:''}).outerHTML}<span>Sledy Top-Up</span></div><span class="chip ${st}">${t(st)}</span></div><div class="rct${ok?' okc':''}">${ok?'✔ ':''}${esc(rcTitle(os))}</div><div class="rcr">${rcRows(os).map(([a,b])=>`<div><span>${esc(a)}</span><b>${esc(b)}</b></div>`).join('')}</div>${payLine(os)?`<p class="note" style="margin-top:10px">${esc(payLine(os))}</p>`:''}${wa?`<p class="note" style="margin-top:10px">${esc(t('waMsg'))}</p>`:''}${ok?'':`<p class="note" style="margin-top:10px">${esc(t('slipN'))}</p>`}`;
+  $('#rcPdf').classList.toggle('dim',!ok);
+  open('#rcOv');
+}
+function pdfFile(os){
+  if(!allOk(os))return toast(t('slipN'));
+  const enc=x=>String(x).replace(/\u2019/g,"'").replace(/[^\x20-\xFF]/g,'').replace(/[\\()]/g,'\\$&');
+  let c='0.05 0.07 0.09 rg 0 770 595 72 re f\nBT /F2 22 Tf 1 1 1 rg 50 804 Td ('+enc('Sledy Top-Up')+') Tj ET\nBT /F1 11 Tf 0.6 0.95 1 rg 50 784 Td ('+enc(rcTitle(os))+') Tj ET\n',y=730;
+  const rows=rcRows(os).slice(0,24);
+  rows.forEach(([a,b],i)=>{const last=i==rows.length-1;
+    c+='BT /F1 10 Tf 0.4 0.44 0.5 rg 50 '+y+' Td ('+enc(a)+') Tj ET\nBT /'+(last?'F2 15':'F2 11')+' Tf 0.05 0.07 0.09 rg 200 '+y+' Td ('+enc(b)+') Tj ET\n0.85 G 50 '+(y-9)+' m 545 '+(y-9)+' l S\n';y-=28});
+  const pl=payLine(os);if(pl)c+='BT /F1 10 Tf 0.4 0.44 0.5 rg 50 '+(y-6)+' Td ('+enc(pl)+') Tj ET\n';
+  c+='BT /F1 9 Tf 0.6 0.62 0.66 rg 50 40 Td ('+enc('Sledy Top-Up')+') Tj ET\n';
+  const ob=['<</Type/Catalog/Pages 2 0 R>>','<</Type/Pages/Kids[3 0 R]/Count 1>>','<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Contents 6 0 R/Resources<</Font<</F1 4 0 R/F2 5 0 R>>>>>>','<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>','<</Type/Font/Subtype/Type1/BaseFont/Helvetica-Bold/Encoding/WinAnsiEncoding>>','<</Length '+c.length+'>>\nstream\n'+c+'\nendstream'];
+  let out='%PDF-1.4\n',off=[];
+  ob.forEach((o,i)=>{off.push(out.length);out+=(i+1)+' 0 obj\n'+o+'\nendobj\n'});
+  const x=out.length;
+  out+='xref\n0 7\n0000000000 65535 f \n'+off.map(o=>String(o).padStart(10,'0')+' 00000 n \n').join('')+'trailer\n<</Size 7/Root 1 0 R>>\nstartxref\n'+x+'\n%%EOF';
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([Uint8Array.from(out,ch=>ch.charCodeAt(0)&255)],{type:'application/pdf'}));
+  a.download='sledy-receipt-'+os[0].id+'.pdf';document.body.appendChild(a);a.click();a.remove();
+}
+$('#rcPdf').onclick=()=>pdfFile(rcList);
+$('#rcWaB').onclick=()=>{
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(rcText(rcList))}`,'_blank');
+  if(CONFIG.API)fetch(CONFIG.API+'/receipt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orders:rcList.map(o=>o.id),channel:'whatsapp'})}).catch(()=>{});
+};
+let CO={items:[],src:'buy'},pmSel='MonCash',SRV={};
+const coT=()=>{const sub=CO.items.reduce((n,it)=>n+amt(it),0),r=pmSel=='BAL'?0:((CONFIG.FEE||{})[pmSel]||0);return{sub,r,fee:Math.round(sub*r)}};
+function openCo(items,src){
+  const u=me();if(!u)return;
+  CO={items:items.map(x=>({...x})),src};pmSel='MonCash';
+  if(SRV.methods&&!SRV.methods.MonCash)pmSel=SRV.methods.Natcash?'Natcash':'BAL';
+  document.body.classList.remove('indash','inprod','inco');document.body.classList.add('inco');
+  $('#coPin').value='';$('#coErr').textContent='';$('#coTerms').checked=false;
+  const lo=(LS('sledy_orders')||[]).find(o=>o.u==u.email&&o.ph);if(lo&&!$('#coPhone').value)$('#coPhone').value=lo.ph;
+  renderCo();scrollTo(0,0);
+}
+function renderCo(){
+  const u=me();if(!u)return;
+  $('#coAv').textContent=u.name.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();$('#coName').textContent=u.name;$('#coMail').textContent=u.email;
+  $('#coList').innerHTML=CO.items.length?CO.items.map((it,i)=>{const p=PR[it.k];return `<div class="coi"><div><b>${esc(p.n)}</b> <span class="note">× ${it.q||1}</span><small>${esc(it.a?it.a+' HTG':lab(p.o[it.o]))}</small>${p.id=='pid'?`<small>ID: ${esc(it.to)}</small><small>${t('vAcc')}: ${esc(it.gn||'')}</small>`:`<small>${esc(it.to)}</small>${p.id=='wa'?`<small>${esc(t('waMsg'))}</small>`:''}`}</div><div class="coa">${amt(it)} HTG<button class="x" data-rm="${i}" aria-label="Remove">🗑</button></div></div>`}).join(''):`<p class="note">${t('emptyC')}</p>`;
+  const T=coT(),bal=u.bal||0;
+  $('#coSub').textContent=T.sub+' HTG';$('#coTot').textContent=(T.sub+T.fee)+' HTG';
+  $('#pmList').innerHTML=[['MonCash','MonCash','pmMon','m'],['Natcash','NatCash','pmNat','n'],['BAL',t('pmBal'),'pmBalD','b']].filter(m=>!(m[0]=='BAL'&&CO.src=='wal')).filter(m=>m[0]=='BAL'||!SRV.methods||SRV.methods[m[0]]).map(([k,n,d,c])=>{
+    const on=pmSel==k,off=k=='BAL'&&bal<T.sub;
+    return `<label class="pm2 ${c}${on?' on':''}${off?' off':''}"><input type="radio" name="pmx" value="${k}" ${on?'checked':''} ${off?'disabled':''}><span class="rd"></span><b>${esc(n)}${k=='BAL'?': <em>'+bal+' HTG</em>':''}</b>${on?`<div class="pmd">${off?t('errBal'):t(d)}</div>`:''}</label>`}).join('');
+  $('#pmInfo').classList.toggle('dim',pmSel=='BAL');
+  $('#pmHow').textContent=pmSel=='BAL'?'':(SRV.methods&&!Object.values(SRV.methods).some(Boolean)?t('noPay'):t('coHow'));
+  $('#feeN').classList.toggle('dim',!(T.r>0));$('#feeN').textContent=t('feeN').replace('%p',Math.round(T.r*1000)/10).replace('%m',pmSel);
+  $('#coPay').textContent=t('payB').replace('%a',T.sub+T.fee);$('#coPay').disabled=!CO.items.length||(pmSel!='BAL'&&!!SRV.methods&&!SRV.methods[pmSel]);
+}
+$('#pmList').onchange=e=>{if(e.target.name=='pmx'){pmSel=e.target.value;renderCo()}};
+$('#coList').onclick=e=>{const b=e.target.closest('[data-rm]');if(!b)return;CO.items.splice(+b.dataset.rm,1);if(CO.src=='cart')setCart(CO.items.map(x=>({...x})));renderCo()};
+$('#termsLnk').onclick=e=>{e.preventDefault();$('#tBody').innerHTML=t('tB').split('|').map(x=>'<p>'+esc(x)+'</p>').join('');open('#tOv')};
+$('#coBack').onclick=()=>{document.body.classList.remove('inco');if(CO.src=='buy'&&cur)document.body.classList.add('inprod');scrollTo(0,0);if(CO.src=='wal')setTimeout(()=>$('#rec').scrollIntoView(),60)};
+$('#coPay').onclick=async()=>{
+  const err=$('#coErr');
+  if(!CO.items.length)return err.textContent=t('emptyC');
+  if(!$('#coTerms').checked)return err.textContent=t('errTerms');
+  const pb=$('#coPay');if(pb.dataset.b)return;pb.dataset.b='1';pb.disabled=true;let r;
+  try{r=await place(CO.items,pmSel,$('#coPhone').value.trim(),$('#coPin').value,err,coT().r)}finally{delete pb.dataset.b;pb.disabled=!CO.items.length}
+  if(r){if(CO.src=='cart')setCart([]);document.body.classList.remove('inco');dash();scrollTo(0,0);if(CONFIG.API&&pmSel!='BAL')payNow(r[0].id);else showReceipt(r)}
+};
+$('#bBuy').onclick=()=>{const its=items();if(!its)return;openCo(its,'buy')};
+$('#bCart').onclick=()=>{const its=items();if(!its)return;setCart([...cart(),...its]);toast(t('added'))};
+$('#pBack').onclick=()=>{document.body.classList.remove('inprod');scrollTo(0,0)};
+function drawCart(){
+  const a=cart();
+  $('#cList').innerHTML=a.length?a.map((it,i)=>`<div class="ord"><div><b>${PR[it.k].n}</b> - ${esc(itLab(it))}<small>${esc(it.to)}${it.gn?' ('+esc(it.gn)+')':''}</small></div><div>${amt(it)} HTG${it.a?'':`<button class="btn ghost rm" data-q="-1" data-ix="${i}" aria-label="-1">-</button><button class="btn ghost rm" data-q="1" data-ix="${i}" aria-label="+1">+</button>`}<button class="btn ghost rm" data-rm="${i}" aria-label="Remove">x</button></div></div>`).join(''):`<p class="note">${t('emptyC')}</p>`;
+  $('#cTot').textContent=a.reduce((n,it)=>n+amt(it),0)+' HTG';
+}
+/* Automatic check: your server answers {paid:true} only when the money really arrived. */
+const RETURN_TX=new URLSearchParams(location.search).get('transactionId')||'';
+const grpOf=(os,o,st)=>(o.grp?os.filter(x=>x.grp==o.grp&&x.u==o.u&&x.s==st):[o]);
+const payload=(g,o,tot)=>({id:o.grp||o.id,orderIds:g.map(x=>x.id),method:o.pm,amount:tot,payerName:o.pn||null,payerNumber:o.ph,txid:RETURN_TX||null,ref:o.ref||null,type:g.map(x=>x.k).join(','),target:o.to});
+async function verify(id){
+  if(!CONFIG.API)return;
+  const os=LS('sledy_orders')||[],o=os.find(x=>x.id==id);if(!o||o.s!='paid')return;
+  const g=grpOf(os,o,'paid'),tot=g.reduce((n,x)=>n+x.a+(x.fee||0),0);
+  try{
+    const r=await fetch(CONFIG.API+'/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload(g,o,tot))});
+    const d=await r.json();
+    if(d&&d.paid===true){g.forEach(x=>sledyConfirm((LS('sledy_orders')||[]).findIndex(y=>y.id==x.id)));toast(t('ok'))}
+    else if(d&&d.duplicate===true){
+      const r2=strike(o.u),n=LS('sledy_orders')||[];g.forEach(x=>{const z=n.find(y=>y.id==x.id);if(z){z.s='pend';z.ts=Date.now()}});LS('sledy_orders',n);
+      if(r2.blocked){localStorage.removeItem('sledy_session');document.body.classList.remove('indash','inprod','inco');render();return toast(t('errBan'))}
+      render();toast(r2.strikes>=3?t('warnDup').replace('%n',r2.strikes):t('errDup'));
+    }
+    else if(d&&d.failed===true){const n=LS('sledy_orders')||[];g.forEach(x=>{const z=n.find(y=>y.id==x.id);if(z){z.s='pend';z.ts=Date.now()}});LS('sledy_orders',n);render();toast(t('payFail'))}
+  }catch(e){/* stays in verification, checked again soon */}
+}
+async function payNow(id){
+  if(!CONFIG.API){toast(t('noApi'));return}
+  const os=LS('sledy_orders')||[],o=os.find(x=>x.id==id);if(!o||o.s!='pend')return;
+  const g=grpOf(os,o,'pend'),tot=g.reduce((n,x)=>n+x.a+(x.fee||0),0);
+  toast(t('vWait'));
+  try{
+    const r=await fetch(CONFIG.API+'/pay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:o.grp||o.id,orderIds:g.map(x=>x.id),items:g.map(x=>x.it),method:o.pm,amount:tot,payerNumber:o.ph,description:g.map(x=>x.p+' - '+x.o).join(', '),returnUrl:location.href.split('#')[0].split('?')[0]})});
+    const d=await r.json();if(!r.ok)throw 0;
+    g.forEach(x=>{x.s='paid';x.ts=Date.now();if(d.ref)x.ref=d.ref});LS('sledy_orders',os);dash();
+    if(d.url)location.assign(d.url);
+  }catch(e){toast(t('payErr'))}
+}
+async function chkNow(id){
+  await verify(id);const o=(LS('sledy_orders')||[]).find(x=>x.id==id);if(o&&o.s=='paid')toast(t('chkNo'));
+}
+setInterval(()=>{const u=me();if(!u||!CONFIG.API)return;(LS('sledy_orders')||[]).filter(o=>o.u==u.email&&o.s=='paid').forEach(o=>verify(o.id))},8000);
+$('#cList').onclick=e=>{
+  const b=e.target.closest('[data-rm],[data-q]');if(!b)return;const a=cart();
+  if(b.dataset.rm!==undefined)a.splice(+b.dataset.rm,1);
+  else{const it=a[+b.dataset.ix];it.q=Math.max(1,Math.min(20,(it.q||1)+ +b.dataset.q))}
+  setCart(a);drawCart();
+};
+$('#cartBtn').onclick=()=>{
+  if(!me()){setMode('login');open('#authOv');return toast(t('need'))}
+  $('#cErr').textContent='';drawCart();open('#cartOv');
+};
+$('#cGo').onclick=()=>{const a=cart();if(!a.length)return $('#cErr').textContent=t('emptyC');shut('#cartOv');openCo(a,'cart')};
+const goRec=()=>{document.body.classList.remove('indash','inprod','inco');setTimeout(()=>$('#rec').scrollIntoView({behavior:'smooth'}),60)};
+$('#recBtn').onclick=$('#recBtn2').onclick=$('#balBtn').onclick=goRec;
+$('#back').onclick=()=>{document.body.classList.remove('indash');scrollTo(0,0)};
+/* Admin helper: after you verify a payment, run sledyConfirm(index) in the console.
+   Confirming a wallet order adds its amount to the user's balance. */
+window.sledyConfirm=i=>{
+  const os=LS('sledy_orders')||[],o=os[i];if(!o||o.s=='ok'||o.s=='cx')return;
+  o.s='ok';o.ts=Date.now();
+  if(o.k=='wal'){const us=LS('sledy_users');us[o.u].bal=(us[o.u].bal||0)+o.a;LS('sledy_users',us)}
+  LS('sledy_orders',os);render();
+};
+document.querySelectorAll('.wa').forEach(a=>a.href='https://wa.me/'+WA);
+document.querySelectorAll('footer a').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('indash')));
+
+function stepper(o){
+  const c=o.s=='pend'?1:o.s=='paid'?2:3;
+  return `<ol class="stp4">${['stp1','stp2','stp3','stp4'].map((k,i)=>{const d=o.s=='ok'||i<c;return `<li class="${d?'done':i==c?'now':''}"><i>${d?'✓':i+1}</i><span>${t(k)}</span></li>`}).join('')}</ol>`;
+}
+function orderPanel(o){
+  if(o.s=='cx')return '';
+  let h=stepper(o);
+  const os=LS('sledy_orders')||[],g=grpOf(os,o,o.s),tot=g.reduce((n,x)=>n+x.a+(x.fee||0),0),nm=o.pm=='Natcash'?'NatCash':o.pm;
+  if(o.s=='pend'){
+    h+=`<div class="wait2"><div class="wtop"><div><span class="note">${t('payTot')}${g.length>1?' ('+t('grpN').replace('%n',g.length)+')':''}</span><b class="wamt">${tot} HTG</b></div><div class="wmeth"><i class="mk ${o.pm=='Natcash'?'n':'m'}">${nm[0]}</i><span>${esc(nm)}<small>${esc(o.ph||'')}</small></span></div></div>`;
+    h+=`<button class="btn payb" data-act="pay">${t('payNowB').replace('%m',nm)}</button><p class="note">${t('apiHint')}</p><div class="row"><button class="btn ghost" data-act="cx">${t('cancel')}</button></div></div>`;
+  }else if(o.s=='paid'){
+    h+=`<div class="wait2"><div class="vh"><span class="spin" aria-hidden="true"></span><b>${t('verT')}</b></div><p class="note">${t('verD')}</p>${o.ref?`<p class="note">${t('ref')}: ${esc(o.ref)}</p>`:''}${CONFIG.API?`<div class="row"><button class="btn ghost" data-act="chk">${t('chkB')}</button></div>`:''}</div>`;
+  }
+  return h;
+}
+let tab='sum';
+function tabs(){document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab==tab));document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id=='tab-'+tab))}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;tabs()});
+function dash(){
+  const u=me();if(!u)return;
+  document.body.classList.remove('inprod','inco');document.body.classList.add('indash');tabs();
+  $('#av').textContent=u.email[0].toUpperCase();$('#hello').textContent=u.name;$('#dMail').textContent=u.email;
+  $('#dBal').textContent=$('#dBal2').textContent=(u.bal||0)+' HTG';
+  const all=(LS('sledy_orders')||[]).map((o,i)=>({...o,i})),os=all.filter(o=>o.u==u.email);
+  const P=os.filter(o=>o.s=='pend'||o.s=='paid'),R=os.filter(o=>o.s=='ok'),X=os.filter(o=>o.s=='cx'),W=os.filter(o=>o.k=='wal');
+  const spent=R.filter(o=>o.k!='wal').reduce((n,o)=>n+o.a,0);
+  $('#stats').innerHTML=[[(u.bal||0)+' HTG','bal'],[P.length,'sPend'],[R.length,'sRecv'],[spent+' HTG','sSpent']].map(([v,k])=>`<div class="stat"><b>${v}</b><span>${t(k)}</span></div>`).join('');
+  const card=o=>{
+    const w=orderPanel(o);
+    const re=o.s=='ok'&&o.k!='wal'&&o.it&&PR[o.k]?`<button class="btn ghost" data-act="re" style="margin:8px 0 0 8px">${t('re')}</button>`:'';
+    return `<div class="oc" data-n="${o.i}"><div class="h"><div><b>${esc(o.p)}</b> - ${esc(o.o)}<small class="note" style="display:block">${esc(o.to)}${o.gn?' ('+esc(o.gn)+')':''} | ${esc(o.pm)} | ${esc(o.ph||'')} | ${esc(o.d)}</small></div><div style="text-align:right">${o.a} HTG<br><span class="chip ${o.s}">${t(o.s)}</span></div></div>${w}${o.s=='cx'?'':`<button class="btn ghost" data-act="rc" style="margin-top:8px">${o.s=='ok'?t('rcB'):t('slipT')}</button>`}${re}</div>`};
+  const sec=(l,a)=>a.length?`<h4>${t(l)} (${a.length})</h4>`+a.map(card).join(''):'';
+  const none=`<p class="note">${t('none')}</p>`;
+  $('#orders').innerHTML=os.length?sec('ordP',P)+sec('ordR',R)+sec('ordX',X):none;
+  $('#sumOrders').innerHTML=P.length?P.map(card).join(''):none;
+  $('#walHist').innerHTML=W.length?W.map(card).join(''):none;
+  nfRender();
+}
+const ordClick=e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const c=b.closest('.oc'),os=LS('sledy_orders'),o=os[+c.dataset.n],a=b.dataset.act;
+  if(a=='rc')return showReceipt([o]);
+  if(a=='pay')return payNow(o.id);
+  if(a=='chk')return chkNow(o.id);
+  if(a=='re'){setCart([...cart(),o.it]);return toast(t('added'))}
+  if(a=='cx'){o.s='cx';o.ts=Date.now()}
+  LS('sledy_orders',os);dash();
+};
+$('#orders').onclick=$('#sumOrders').onclick=$('#walHist').onclick=ordClick;
+$('#dashBtn').onclick=dash;
+$('#logo').onclick=()=>document.body.classList.remove('indash','inprod','inco');
+$('#out').onclick=()=>{localStorage.removeItem('sledy_session');document.body.classList.remove('indash');render()};
+$('#pinChg').onclick=()=>$('#pinBox').classList.toggle('dim');
+$('#pinSave').onclick=async()=>{
+  const n=$('#newPin').value,u=me();
+  if(!/^\d{4,6}$/.test(n))return toast(t('errP'));
+  if(weakPin(n))return toast(t('errPinW'));
+  const users=LS('sledy_users');users[u.email].pin=await hash(u.email+'pin'+n);LS('sledy_users',users);
+  $('#newPin').value='';$('#pinBox').classList.add('dim');toast(t('pinOk'));
+};
+
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>shut('#'+b.closest('.ov').id));
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('mousedown',e=>{if(e.target==o)o.classList.remove('on')}));
+addEventListener('keydown',e=>{if(e.key=='Escape')document.querySelectorAll('.ov').forEach(o=>o.classList.remove('on'))});
+$('#q').oninput=filter;
+function filter(){
+  const q=$('#q').value.trim().toLowerCase();let any=false;
+  document.querySelectorAll('.card').forEach(c=>{const m=!q||c.dataset.s.includes(q);c.classList.toggle('dim',!m);if(m)any=true});
+  document.querySelectorAll('#sections .grid').forEach(el=>{const vis=!!el.querySelector('.card:not(.dim)');el.classList.toggle('dim',!vis);el.previousElementSibling.classList.toggle('dim',!vis)});
+  $('#noRes').classList.toggle('dim',any);
+}
+$('#lockBtn').onclick=()=>{setMode('login');open('#authOv')};
+$('#pwGo').onclick=async()=>{
+  const u=me(),cp=$('#curPw').value,nw=$('#newPw').value;
+  if(u.pw!==await hash(u.email+cp))return toast(t('errCur'));
+  if(!strong(nw))return toast(t('errWeak'));
+  const us=LS('sledy_users');us[u.email].pw=await hash(u.email+nw);LS('sledy_users',us);
+  $('#curPw').value=$('#newPw').value='';toast(t('pwOk'));
+};
+$('#delBtn').onclick=async()=>{
+  const u=me();
+  if(u.pw!==await hash(u.email+$('#curPw').value))return toast(t('errCur'));
+  if(!confirm(t('delQ')))return;
+  const us=LS('sledy_users');delete us[u.email];LS('sledy_users',us);
+  LS('sledy_orders',(LS('sledy_orders')||[]).filter(o=>o.u!=u.email));
+  localStorage.removeItem('sledy_cart_'+u.email);localStorage.removeItem('sledy_session');
+  document.body.classList.remove('indash');$('#curPw').value='';render();toast(t('delOk'));
+};
+const nfRead=()=>{const u=me();return u?(LS('sledy_nread_'+u.email)||[]):[]};
+function nfList(){
+  const u=me();if(!u)return[];const rd=nfRead();
+  return (LS('sledy_orders')||[]).filter(o=>o.u==u.email&&o.id).map(o=>({o,key:o.id+':'+o.s,ts:o.ts||parseInt(o.id.slice(0,8),36)||0})).map(x=>({...x,un:!rd.includes(x.key)})).sort((a,b)=>b.ts-a.ts);
+}
+const NK={pend:'nPend',paid:'nPaid',ok:'nOk',cx:'nCx'};
+const nfHtml=l=>l.length?l.map(x=>`<button class="nfi${x.un?' u':''}" data-o="${x.o.id}" data-k="${x.key}"><b>${esc(x.o.p)}</b><span>${t(NK[x.o.s])}</span><small>${new Date(x.ts).toLocaleString()}</small></button>`).join(''):`<p class="note" style="padding:10px">${t('nfNone')}</p>`;
+let nfSeen=null;
+function nfRender(){
+  const u=me(),l=nfList(),un=l.filter(x=>x.un).length;
+  $('#nfw').classList.toggle('dim',!u);$('#nfN').textContent=un;$('#nfN').classList.toggle('dim',!un);
+  $('#nfMenu').innerHTML=`<div class="nfh"><b>${t('nfT')}</b><button class="btn ghost sm" id="nfAll">${t('nfAll')}</button></div>`+nfHtml(l.slice(0,8));
+  $('#nfTab').innerHTML=`<div class="row" style="margin:12px 0"><button class="btn ghost sm" id="nfAll2">${t('nfAll')}</button></div>`+nfHtml(l);
+  if(u){const keys=l.map(x=>x.key);if(nfSeen&&nfSeen.e==u.email)l.filter(x=>!nfSeen.k.includes(x.key)&&x.o.s=='ok').forEach(x=>toast(t('nOkT').replace('%p',x.o.p)));nfSeen={e:u.email,k:keys}}else nfSeen=null;
+}
+$('#nfBtn').onclick=e=>{e.stopPropagation();$('#nfMenu').classList.toggle('dim')};
+const nfClick=e=>{
+  const u=me();if(!u)return;
+  if(e.target.closest('#nfAll,#nfAll2')){LS('sledy_nread_'+u.email,[...new Set([...nfRead(),...nfList().map(x=>x.key)])]);return nfRender()}
+  const b=e.target.closest('.nfi');if(!b)return;
+  LS('sledy_nread_'+u.email,[...new Set([...nfRead(),b.dataset.k])]);
+  const o=(LS('sledy_orders')||[]).find(x=>x.id==b.dataset.o);$('#nfMenu').classList.add('dim');nfRender();
+  if(o&&o.s!='cx')showReceipt([o]);else{tab='ord';dash()}
+};
+$('#nfMenu').onclick=nfClick;$('#nfTab').onclick=nfClick;
+document.addEventListener('click',e=>{if(!e.target.closest('#nfw'))$('#nfMenu').classList.add('dim')});
+addEventListener('storage',()=>render());
+setInterval(()=>{if(me())nfRender()},4000);
+$('#pShare').onclick=()=>{const u=location.href.split('#')[0];if(navigator.share)navigator.share({title:PR[cur].n+' | Sledy Top-Up',url:u}).catch(()=>{});else{navigator.clipboard&&navigator.clipboard.writeText(u);toast(t('linkCp'))}};
+const flag=b=>'<svg viewBox="0 0 24 16" aria-hidden="true">'+b+'</svg>';
+const FL={ht:flag('<rect width="24" height="8" fill="#00209F"/><rect y="8" width="24" height="8" fill="#D21034"/><rect x="8" y="4.5" width="8" height="7" fill="#fff"/>'),
+ fr:flag('<rect width="8" height="16" fill="#0055A4"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#EF4135"/>'),
+ es:flag('<rect width="24" height="16" fill="#AA151B"/><rect y="4" width="24" height="8" fill="#F1BF00"/>'),
+ en:flag('<rect width="24" height="16" fill="#B22234"/>'+[0,1,2,3,4,5].map(i=>`<rect y="${(1.23+i*2.46).toFixed(2)}" width="24" height="1.23" fill="#fff"/>`).join('')+'<rect width="10" height="8.6" fill="#3C3B6E"/>')};
+const LN={ht:'Kreyòl',en:'English',fr:'Français',es:'Español'};
+function langUI(){$('#lgBtn').innerHTML=FL[lang]+'<span>'+LN[lang]+'</span>';$('#lgMenu').innerHTML=['ht','en','fr','es'].map(l=>`<button data-l="${l}" role="option">${FL[l]}<span>${LN[l]}</span></button>`).join('')}
+$('#lgBtn').onclick=()=>$('#lgMenu').classList.toggle('dim');
+$('#lgMenu').onclick=e=>{const b=e.target.closest('[data-l]');if(!b)return;lang=b.dataset.l;localStorage.setItem('sledy_lang',lang);$('#lgMenu').classList.add('dim');render()};
+document.addEventListener('click',e=>{if(!e.target.closest('#lg'))$('#lgMenu').classList.add('dim')});
+$('#bnav').onclick=e=>{
+  const b=e.target.closest('[data-go]');if(!b)return;const g=b.dataset.go;
+  if(g=='cart')return $('#cartBtn').click();
+  if(g=='acct')return me()?dash():$('#authBtn').click();
+  document.body.classList.remove('indash','inprod','inco');
+  setTimeout(()=>{if(g=='home')scrollTo({top:0,behavior:'smooth'});else{const el=$(g=='rec'?'#rec':'#sec-'+g.slice(2));el&&el.scrollIntoView({behavior:'smooth'})}},60);
+};
+$('#wQ').onclick=e=>{const b=e.target.closest('[data-a]');if(b)$('#wAmt').value=b.dataset.a};
+$('#wGo').onclick=()=>{
+  const u=me(),err=$('#wErr'),a=Math.floor(+$('#wAmt').value);
+  if(!u){setMode('login');open('#authOv');return}
+  if(!(a>=MINREC)){err.textContent=t('errMin');return}
+  err.textContent='';openCo([{k:'wal',o:0,to:u.email,a}],'wal');
+};
+$('#aPass').addEventListener('input',()=>{if(mode!='login')meter($('#aPass').value,'#pwBar','#pwHint')});
+$('#newPw').addEventListener('input',()=>meter($('#newPw').value,'#pwBar2','#pwHint2'));
+$('#yr').textContent=new Date().getFullYear();
+render();
+if(CONFIG.API)fetch(CONFIG.API+'/config').then(r=>r.json()).then(j=>{SRV=j;if(j.fees)CONFIG.FEE=j.fees;if(j.minRecharge)MINREC=j.minRecharge;render()}).catch(()=>{});
+if(RETURN_TX){history.replaceState(null,'',location.pathname);const u0=me();if(u0){dash();(LS('sledy_orders')||[]).filter(o=>o.u==u0.email&&o.s=='paid').forEach(o=>verify(o.id))}}
+</script>
+</body>
+</html>
